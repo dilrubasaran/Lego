@@ -1,0 +1,291 @@
+﻿@inject Lego.Localization.Services.LocalizationService Localizer
+
+@{
+    ViewData["Title"] = Localizer.GetLocalizedHTML("Language");
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+}
+
+<style>
+    .language-switcher {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    .lang-btn {
+        margin: 0 5px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .lang-btn.active {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+    }
+    
+    .lang-btn:not(.active) {
+        background: #f8f9fa;
+        color: #495057;
+        border: 2px solid #dee2e6;
+    }
+    
+    .lang-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    
+    .demo-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .demo-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .gradient-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .text-demo {
+        padding: 20px;
+        border-radius: 10px;
+        margin: 10px 0;
+        background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+    }
+    
+    .welcome-section {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        color: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .btn-demo {
+        margin: 5px;
+        border-radius: 25px;
+        padding: 10px 20px;
+        border: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-demo:hover {
+        transform: scale(1.05);
+    }
+</style>
+
+<!-- Language Switcher -->
+<div class="language-switcher">
+    <a href="/Home/ChangeLanguage?culture=tr-TR" 
+       class="lang-btn @(currentCulture.StartsWith("tr") ? "active" : "")">
+        🇹🇷 @Localizer.GetLocalizedHTML("Turkish")
+    </a>
+    <a href="/Home/ChangeLanguage?culture=en-US" 
+       class="lang-btn @(currentCulture.StartsWith("en") ? "active" : "")">
+        🇺🇸 @Localizer.GetLocalizedHTML("English")
+    </a>
+</div>
+
+<div class="container-fluid mt-4">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <h1 class="display-4">
+            <i class="fas fa-globe"></i> 
+            @Localizer.GetLocalizedHTML("Welcome")
+        </h1>
+        <p class="lead">@Localizer.GetLocalizedHTML("Language") Demo</p>
+        <small>Current Culture: <strong>@currentCulture</strong></small>
+    </div>
+
+    <div class="row">
+        <!-- Navigation & Actions -->
+        <div class="col-md-6 mb-4">
+            <div class="demo-card">
+                <div class="gradient-header p-3">
+                    <h4><i class="fas fa-navigation"></i> @Localizer.GetLocalizedHTML("Home") & Actions</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-demo">
+                        <h5>📍 @Localizer.GetLocalizedHTML("Home")</h5>
+                        <p>🔗 @Localizer.GetLocalizedHTML("About") | @Localizer.GetLocalizedHTML("Contact")</p>
+                        <p>📄 @Localizer.GetLocalizedHTML("Details") | @Localizer.GetLocalizedHTML("Files")</p>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-primary btn-demo">@Localizer.GetLocalizedHTML("Login")</button>
+                        <button class="btn btn-success btn-demo">@Localizer.GetLocalizedHTML("Save")</button>
+                        <button class="btn btn-warning btn-demo">@Localizer.GetLocalizedHTML("Edit")</button>
+                        <button class="btn btn-danger btn-demo">@Localizer.GetLocalizedHTML("Delete")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Elements -->
+        <div class="col-md-6 mb-4">
+            <div class="demo-card">
+                <div class="gradient-header p-3">
+                    <h4><i class="fas fa-user-circle"></i> @Localizer.GetLocalizedHTML("Login") Form</h4>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">@Localizer.GetLocalizedHTML("Username")</label>
+                            <input type="text" class="form-control" placeholder="@Localizer.GetLocalizedHTML("Username")">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">@Localizer.GetLocalizedHTML("Password")</label>
+                            <input type="password" class="form-control" placeholder="@Localizer.GetLocalizedHTML("Password")">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">@Localizer.GetLocalizedHTML("Submit")</button>
+                            <button type="button" class="btn btn-secondary">@Localizer.GetLocalizedHTML("Cancel")</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Messages -->
+        <div class="col-md-6 mb-4">
+            <div class="demo-card">
+                <div class="gradient-header p-3">
+                    <h4><i class="fas fa-info-circle"></i> Status Messages</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-spinner fa-spin"></i> @Localizer.GetLocalizedHTML("Loading")
+                    </div>
+                    <div class="alert alert-success">
+                        <i class="fas fa-check"></i> @Localizer.GetLocalizedHTML("Welcome")!
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> @Localizer.GetLocalizedHTML("AccessDenied")
+                    </div>
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times"></i> @Localizer.GetLocalizedHTML("NotFound")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation & Choices -->
+        <div class="col-md-6 mb-4">
+            <div class="demo-card">
+                <div class="gradient-header p-3">
+                    <h4><i class="fas fa-arrows-alt-h"></i> Navigation & Choices</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-demo">
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-chevron-left"></i> @Localizer.GetLocalizedHTML("Previous")
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                @Localizer.GetLocalizedHTML("Next") <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="text-demo">
+                        <h6>Confirmation:</h6>
+                        <button class="btn btn-success me-2">
+                            <i class="fas fa-check"></i> @Localizer.GetLocalizedHTML("Yes")
+                        </button>
+                        <button class="btn btn-danger">
+                            <i class="fas fa-times"></i> @Localizer.GetLocalizedHTML("No")
+                        </button>
+                    </div>
+                    
+                    <div class="text-demo">
+                        <button class="btn btn-info">
+                            <i class="fas fa-sign-out-alt"></i> @Localizer.GetLocalizedHTML("Logout")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Table -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="demo-card">
+                <div class="gradient-header p-3">
+                    <h4><i class="fas fa-table"></i> All Localized Strings</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Localized Value</th>
+                                    <th>Icon</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Welcome</td><td>@Localizer.GetLocalizedHTML("Welcome")</td><td>👋</td></tr>
+                                <tr><td>Home</td><td>@Localizer.GetLocalizedHTML("Home")</td><td>🏠</td></tr>
+                                <tr><td>About</td><td>@Localizer.GetLocalizedHTML("About")</td><td>ℹ️</td></tr>
+                                <tr><td>Contact</td><td>@Localizer.GetLocalizedHTML("Contact")</td><td>📞</td></tr>
+                                <tr><td>Login</td><td>@Localizer.GetLocalizedHTML("Login")</td><td>🔐</td></tr>
+                                <tr><td>Logout</td><td>@Localizer.GetLocalizedHTML("Logout")</td><td>🚪</td></tr>
+                                <tr><td>Username</td><td>@Localizer.GetLocalizedHTML("Username")</td><td>👤</td></tr>
+                                <tr><td>Password</td><td>@Localizer.GetLocalizedHTML("Password")</td><td>🔑</td></tr>
+                                <tr><td>Language</td><td>@Localizer.GetLocalizedHTML("Language")</td><td>🌍</td></tr>
+                                <tr><td>English</td><td>@Localizer.GetLocalizedHTML("English")</td><td>🇺🇸</td></tr>
+                                <tr><td>Turkish</td><td>@Localizer.GetLocalizedHTML("Turkish")</td><td>🇹🇷</td></tr>
+                                <tr><td>Loading</td><td>@Localizer.GetLocalizedHTML("Loading")</td><td>⏳</td></tr>
+                                <tr><td>Save</td><td>@Localizer.GetLocalizedHTML("Save")</td><td>💾</td></tr>
+                                <tr><td>Edit</td><td>@Localizer.GetLocalizedHTML("Edit")</td><td>✏️</td></tr>
+                                <tr><td>Delete</td><td>@Localizer.GetLocalizedHTML("Delete")</td><td>🗑️</td></tr>
+                                <tr><td>Submit</td><td>@Localizer.GetLocalizedHTML("Submit")</td><td>📤</td></tr>
+                                <tr><td>Cancel</td><td>@Localizer.GetLocalizedHTML("Cancel")</td><td>❌</td></tr>
+                                <tr><td>Yes</td><td>@Localizer.GetLocalizedHTML("Yes")</td><td>✅</td></tr>
+                                <tr><td>No</td><td>@Localizer.GetLocalizedHTML("No")</td><td>❎</td></tr>
+                                <tr><td>Details</td><td>@Localizer.GetLocalizedHTML("Details")</td><td>📋</td></tr>
+                                <tr><td>Files</td><td>@Localizer.GetLocalizedHTML("Files")</td><td>📁</td></tr>
+                                <tr><td>Previous</td><td>@Localizer.GetLocalizedHTML("Previous")</td><td>⬅️</td></tr>
+                                <tr><td>Next</td><td>@Localizer.GetLocalizedHTML("Next")</td><td>➡️</td></tr>
+                                <tr><td>AccessDenied</td><td>@Localizer.GetLocalizedHTML("AccessDenied")</td><td>🚫</td></tr>
+                                <tr><td>NotFound</td><td>@Localizer.GetLocalizedHTML("NotFound")</td><td>❓</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<script>
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+        // Smooth transitions for cards
+        const cards = document.querySelectorAll('.demo-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '0 5px 25px rgba(0,0,0,0.1)';
+            });
+        });
+    });
+</script>

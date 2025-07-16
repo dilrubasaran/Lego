@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lego.Localization", "Lego.Localization.csproj", "{D31BE79E-A0AC-9EB6-252B-4E3D23096940}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D31BE79E-A0AC-9EB6-252B-4E3D23096940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D31BE79E-A0AC-9EB6-252B-4E3D23096940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D31BE79E-A0AC-9EB6-252B-4E3D23096940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D31BE79E-A0AC-9EB6-252B-4E3D23096940}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA778FEC-6901-4EFD-9149-263D57435031}
+	EndGlobalSection
+EndGlobal
