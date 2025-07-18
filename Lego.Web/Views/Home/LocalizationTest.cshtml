@@ -92,7 +92,7 @@
        class="lang-btn @(currentCulture.StartsWith("tr") ? "active" : "")">
         🇹🇷 @Localizer.GetLocalizedHTML("Turkish")
     </a>
-    <a href="/Home/ChangeLanguage?culture=en-US" 
+    <a href="/Home/ChangeLanguage?culture=en" 
        class="lang-btn @(currentCulture.StartsWith("en") ? "active" : "")">
         🇺🇸 @Localizer.GetLocalizedHTML("English")
     </a>
@@ -217,6 +217,103 @@
                 </div>
             </div>
         </div>
+
+        <!-- Dropdown Tests -->
+        <div class="col-md-12 mb-4">
+            <div class="demo-card">
+                <div class="gradient-header p-3">
+                    <h4><i class="fas fa-list-ul"></i> Dropdown Localization Test</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-demo">
+                                <h6><i class="fas fa-cog"></i> Actions Dropdown</h6>
+                                <select class="form-select" id="actionsDropdown">
+                                    <option value="">@Localizer.GetLocalizedHTML("Save")</option>
+                                    <option value="edit">@Localizer.GetLocalizedHTML("Edit")</option>
+                                    <option value="delete">@Localizer.GetLocalizedHTML("Delete")</option>
+                                    <option value="details">@Localizer.GetLocalizedHTML("Details")</option>
+                                    <option value="cancel">@Localizer.GetLocalizedHTML("Cancel")</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="text-demo">
+                                <h6><i class="fas fa-globe"></i> @Localizer.GetLocalizedHTML("Language") Selection</h6>
+                                <select class="form-select" id="languageDropdown">
+                                    <option value="">-- @Localizer.GetLocalizedHTML("Language") --</option>
+                                    <option value="tr" selected="@(currentCulture.StartsWith("tr"))">
+                                        🇹🇷 @Localizer.GetLocalizedHTML("Turkish")
+                                    </option>
+                                    <option value="en" selected="@(currentCulture.StartsWith("en"))">
+                                        🇺🇸 @Localizer.GetLocalizedHTML("English")
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="text-demo">
+                                <h6><i class="fas fa-folder"></i> Navigation Menu</h6>
+                                <select class="form-select" id="navigationDropdown">
+                                    <option value="">-- @Localizer.GetLocalizedHTML("Home") --</option>
+                                    <option value="home">🏠 @Localizer.GetLocalizedHTML("Home")</option>
+                                    <option value="about">ℹ️ @Localizer.GetLocalizedHTML("About")</option>
+                                    <option value="contact">📞 @Localizer.GetLocalizedHTML("Contact")</option>
+                                    <option value="files">📁 @Localizer.GetLocalizedHTML("Files")</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="text-demo">
+                                <h6><i class="fas fa-user-check"></i> User Actions</h6>
+                                <select class="form-select" id="userActionsDropdown" multiple size="4">
+                                    <option value="login">🔐 @Localizer.GetLocalizedHTML("Login")</option>
+                                    <option value="logout">🚪 @Localizer.GetLocalizedHTML("Logout")</option>
+                                    <option value="save">💾 @Localizer.GetLocalizedHTML("Save")</option>
+                                    <option value="submit">📤 @Localizer.GetLocalizedHTML("Submit")</option>
+                                </select>
+                                <small class="text-muted">Multi-select dropdown</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="text-demo">
+                                <h6><i class="fas fa-question-circle"></i> Confirmation Options</h6>
+                                <select class="form-select" id="confirmationDropdown">
+                                    <option value="">-- @Localizer.GetLocalizedHTML("Submit") --</option>
+                                    <option value="yes" class="text-success">✅ @Localizer.GetLocalizedHTML("Yes")</option>
+                                    <option value="no" class="text-danger">❎ @Localizer.GetLocalizedHTML("No")</option>
+                                    <option value="cancel" class="text-warning">❌ @Localizer.GetLocalizedHTML("Cancel")</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dropdown Test Results -->
+                    <div class="mt-4">
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle"></i> Dropdown Test Instructions:</h6>
+                            <ul class="mb-0">
+                                <li>🇹🇷 <strong>@Localizer.GetLocalizedHTML("Turkish")</strong>: Dil değiştir ve dropdown seçeneklerinin değiştiğini gör</li>
+                                <li>🇺🇸 <strong>@Localizer.GetLocalizedHTML("English")</strong>: Dil değiştir ve dropdown seçeneklerinin güncellendiğini gör</li>
+                                <li>🔄 Çoklu dropdown türleri farklı senaryoları test eder</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="dropdownResult" class="alert alert-secondary">
+                            <strong>Seçilen Değer Görüntüle:</strong> 
+                            <span id="selectedValueDisplay">@Localizer.GetLocalizedHTML("Loading")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Summary Table -->
@@ -224,16 +321,16 @@
         <div class="col-12">
             <div class="demo-card">
                 <div class="gradient-header p-3">
-                    <h4><i class="fas fa-table"></i> All Localized Strings</h4>
+                    <h4><i class="fas fa-table"></i> Tüm Yerelleştirilmiş Dizeler</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Key</th>
-                                    <th>Localized Value</th>
-                                    <th>Icon</th>
+                                    <th>Anahtar</th>
+                                    <th>Yerelleştirilmiş Değer</th>
+                                    <th>İkon</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -275,9 +372,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <script>
-    // Add some interactive effects
+    // İnteraktif efektler ekle
     document.addEventListener('DOMContentLoaded', function() {
-        // Smooth transitions for cards
+        // Kartlar için yumuşak geçiş efektleri
         const cards = document.querySelectorAll('.demo-card');
         cards.forEach(card => {
             card.addEventListener('mouseenter', function() {
@@ -287,5 +384,74 @@
                 this.style.boxShadow = '0 5px 25px rgba(0,0,0,0.1)';
             });
         });
+
+        // Dropdown değişim kontrolcüleri - test için
+        const dropdowns = ['actionsDropdown', 'languageDropdown', 'navigationDropdown', 'userActionsDropdown', 'confirmationDropdown'];
+        const selectedValueDisplay = document.getElementById('selectedValueDisplay');
+        
+        dropdowns.forEach(dropdownId => {
+            const dropdown = document.getElementById(dropdownId);
+            if (dropdown) {
+                dropdown.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const value = this.value;
+                    const text = selectedOption ? selectedOption.text : '';
+                    
+                    if (value) {
+                        selectedValueDisplay.innerHTML = `
+                            <strong>${dropdownId}:</strong> "${text}" (değer: ${value})
+                            <br><small class="text-muted">Seçenek metni dille birlikte değişir! 🌍</small>
+                        `;
+                        selectedValueDisplay.className = 'text-success';
+                    } else {
+                        selectedValueDisplay.innerHTML = 'Sonucu görmek için herhangi bir dropdown seçeneği seçin...';
+                        selectedValueDisplay.className = 'text-muted';
+                    }
+                });
+            }
+        });
+
+        // Dil dropdown'u için özel kontrolcü - gerçek dil değişimi
+        const languageDropdown = document.getElementById('languageDropdown');
+        if (languageDropdown) {
+            languageDropdown.addEventListener('change', function() {
+                const selectedLang = this.value;
+                if (selectedLang) {
+                    const culture = selectedLang === 'tr' ? 'tr-TR' : 'en';
+                    
+                    // Yükleniyor mesajı göster
+                    selectedValueDisplay.innerHTML = `
+                        <i class="fas fa-spinner fa-spin"></i> 
+                        Dil ${selectedLang.toUpperCase()} olarak değiştiriliyor... Sayfa yenilenecek!
+                    `;
+                    selectedValueDisplay.className = 'text-info';
+                    
+                    // Daha iyi UX için kısa gecikme sonrası yönlendir
+                    setTimeout(() => {
+                        window.location.href = `/Home/ChangeLanguage?culture=${culture}`;
+                    }, 1000);
+                }
+            });
+        }
+
+        // Çoklu seçim dropdown kontrolcüsü
+        const userActionsDropdown = document.getElementById('userActionsDropdown');
+        if (userActionsDropdown) {
+            userActionsDropdown.addEventListener('change', function() {
+                const selectedOptions = Array.from(this.selectedOptions);
+                if (selectedOptions.length > 0) {
+                    const selectedTexts = selectedOptions.map(option => option.text);
+                    selectedValueDisplay.innerHTML = `
+                        <strong>Çoklu Seçim:</strong> ${selectedTexts.join(', ')}
+                        <br><small class="text-muted">${selectedOptions.length} seçenek seçildi</small>
+                    `;
+                    selectedValueDisplay.className = 'text-primary';
+                }
+            });
+        }
+
+        // Başlangıç görünümünü ayarla
+        selectedValueDisplay.innerHTML = 'Sonucu görmek için herhangi bir dropdown seçeneği seçin...';
+        selectedValueDisplay.className = 'text-muted';
     });
 </script>
