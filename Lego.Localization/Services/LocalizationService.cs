@@ -1,36 +1,41 @@
 ﻿using System.Globalization;
 using System.Reflection;
+using System.Security.AccessControl;
+using Lego.Localization.Interfaces;
 using Lego.Localization.Resources;
 using Microsoft.Extensions.Localization;
-
+using ResourceType = Lego.Localization.Enum.ResourceType;
 
 namespace Lego.Localization.Services;
 
-public class LocalizationService
+public class LocalizationService: ILocalizationService
 {
-    private readonly IStringLocalizer _stringLocalizer;
+    private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
     public LocalizationService(IStringLocalizerFactory factory)
     {
-        var type = typeof(SharedResource);
-        var assemblyName = new AssemblyName(type.GetTypeInfo().Assembly.FullName);
-        _stringLocalizer = factory.Create("SharedResource", assemblyName.Name);
+        _stringLocalizerFactory = factory;
     }
 
-    public LocalizedString GetLocalizedHTML(string key)
+    public string Get(string key, ResourceType type)
     {
-        return _stringLocalizer[key];
+        var resourceName = type.ToString(); // Örn: "Header", "Footer", "SharedResource"
+        var assemblyName = new AssemblyName(typeof(LocalizationService).Assembly.FullName);
+
+        // localizer: IStringLocalizer, verdiğin resourceName'e göre uygun .resx dosyasını yükler
+        var localizer = _stringLocalizerFactory.Create(resourceName, assemblyName.Name);
+
+        // Asıl çeviri işlemi burada gerçekleşiyor: key'e karşılık gelen değeri bulur
+        return localizer[key] ?? "";
     }
 
     public string GetCurrentCulture()
     {
-        var currentCulture = CultureInfo.CurrentCulture.Name;
-        return currentCulture;
+        return CultureInfo.CurrentCulture.Name;
     }
 
     public string GetCurrentUICulture()
     {
-        var currentUICulture = CultureInfo.CurrentUICulture.Name;
-        return currentUICulture;
+        return CultureInfo.CurrentUICulture.Name;
     }
 }

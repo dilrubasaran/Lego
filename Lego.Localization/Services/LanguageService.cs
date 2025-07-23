@@ -10,13 +10,13 @@ namespace Lego.Localization.Services;
 public class LanguageService : ILanguageService
 {
     private readonly AppDbContext _context;
-    private readonly LocalizationService _localizationService;
+    private readonly ILocalizationService _localizationService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private const string CULTURE_COOKIE = "culture";
 
     public LanguageService(
         AppDbContext context,
-        LocalizationService localizationService,
+        ILocalizationService localizationService,
         IHttpContextAccessor httpContextAccessor)
     {
         _context = context;

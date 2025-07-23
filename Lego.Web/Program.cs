@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services
 builder.Services.AddControllersWithViews();
 
-// ?? Localization desteði
+// ?? Localization desteï¿½i
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 // ?? DB Context
@@ -20,7 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// ?? Request Localization ayarlarý
+// ?? Request Localization ayarlarï¿½
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[] { new CultureInfo("tr-TR"), new CultureInfo("en-US") };
@@ -36,7 +36,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 });
 
 // ?? DI Servisleri
-builder.Services.AddSingleton<LocalizationService>();
+builder.Services.AddSingleton<ILocalizationService, LocalizationService>();
 builder.Services.AddScoped<ILanguageService, LanguageService>();
 builder.Services.AddHttpContextAccessor();
 

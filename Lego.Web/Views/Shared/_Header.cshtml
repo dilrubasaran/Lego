@@ -1,0 +1,323 @@
+@using Lego.Localization.Enum
+@inject Lego.Localization.Interfaces.ILocalizationService Localizer
+
+@{
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+}
+
+<header class="header-modern">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand brand-logo" href="/">
+                <i class="fas fa-code"></i>
+                <span class="brand-text">
+                    @Localizer.Get("BrandName", ResourceType.Header)
+                    <small class="brand-slogan">@Localizer.Get("BrandSlogan", ResourceType.Header)</small>
+                </span>
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Content -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Main Navigation -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i> @Localizer.Get("Home", ResourceType.Header)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">
+                            <i class="fas fa-info-circle"></i> @Localizer.Get("About", ResourceType.Header)
+                        </a>
+                    </li>
+                    
+                    <!-- Services Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-cogs"></i> @Localizer.Get("Services", ResourceType.Header)
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/services/web">
+                                <i class="fas fa-globe"></i> @Localizer.Get("WebDevelopment", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/services/mobile">
+                                <i class="fas fa-mobile-alt"></i> @Localizer.Get("MobileDevelopment", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/services/design">
+                                <i class="fas fa-paint-brush"></i> @Localizer.Get("UIUXDesign", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/services/marketing">
+                                <i class="fas fa-chart-line"></i> @Localizer.Get("DigitalMarketing", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/services/cloud">
+                                <i class="fas fa-cloud"></i> @Localizer.Get("CloudServices", ResourceType.Header)
+                            </a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Products Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-box"></i> @Localizer.Get("Products", ResourceType.Header)
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/products/software">
+                                <i class="fas fa-laptop-code"></i> @Localizer.Get("SoftwareProducts", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/products/web">
+                                <i class="fas fa-window-maximize"></i> @Localizer.Get("WebApplications", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/products/mobile">
+                                <i class="fas fa-mobile"></i> @Localizer.Get("MobileApps", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/products/ecommerce">
+                                <i class="fas fa-shopping-cart"></i> @Localizer.Get("ECommerceSolutions", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/products/custom">
+                                <i class="fas fa-tools"></i> @Localizer.Get("CustomSoftware", ResourceType.Header)
+                            </a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">
+                            <i class="fas fa-envelope"></i> @Localizer.Get("Contact", ResourceType.Header)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blog">
+                            <i class="fas fa-blog"></i> @Localizer.Get("Blog", ResourceType.Header)
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Right Side Items -->
+                <div class="d-flex align-items-center">
+                    <!-- Search -->
+                    <div class="search-box me-3">
+                        <div class="input-group">
+                            <input type="search" class="form-control" placeholder="@Localizer.Get("SearchPlaceholder", ResourceType.Header)">
+                            <button class="btn btn-outline-light" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Language Switcher -->
+                                         <div class="dropdown me-3">
+                         <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                             <i class="fas fa-globe"></i> 
+                             <span class="d-none d-lg-inline">@Localizer.Get("Language", ResourceType.Header)</span>
+                             <span class="d-lg-none">@(currentCulture.StartsWith("tr") ? "TR" : "EN")</span>
+                         </button>
+                                                 <ul class="dropdown-menu">
+                             <li>
+                                 <a class="dropdown-item @(currentCulture.StartsWith("tr") ? "active" : "")" 
+                                    href="/Home/ChangeLanguage?culture=tr-TR&returnUrl=@Html.Encode(Context.Request.Path + Context.Request.QueryString)">
+                                     🇹🇷 @Localizer.Get("Turkish", ResourceType.Header)
+                                 </a>
+                             </li>
+                             <li>
+                                 <a class="dropdown-item @(currentCulture.StartsWith("en") ? "active" : "")" 
+                                    href="/Home/ChangeLanguage?culture=en-US&returnUrl=@Html.Encode(Context.Request.Path + Context.Request.QueryString)">
+                                     🇺🇸 @Localizer.Get("English", ResourceType.Header)
+                                 </a>
+                             </li>
+                         </ul>
+                    </div>
+
+                    <!-- Cart -->
+                    <div class="dropdown me-3">
+                        <button class="btn btn-outline-light position-relative" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                0
+                            </span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end cart-dropdown">
+                            <h6 class="dropdown-header">@Localizer.Get("Cart", ResourceType.Header)</h6>
+                            <div class="dropdown-item text-muted">@Localizer.Get("CartEmpty", ResourceType.Header)
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/cart">
+                                <i class="fas fa-shopping-bag"></i> @Localizer.Get("ViewCart", ResourceType.Header)
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="dropdown me-3">
+                        <button class="btn btn-outline-light position-relative" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+                                0
+                            </span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end notifications-dropdown">
+                            <h6 class="dropdown-header">@Localizer.Get("Notifications", ResourceType.Header)</h6>
+                            <div class="dropdown-item text-muted">@Localizer.Get("NoNotifications", ResourceType.Header)
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/notifications">
+                                <i class="fas fa-list"></i> @Localizer.Get("ViewAllNotifications", ResourceType.Header)
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Account Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i> @Localizer.Get("MyAccount", ResourceType.Header)
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/login">
+                                <i class="fas fa-sign-in-alt"></i> @Localizer.Get("Login", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/register">
+                                <i class="fas fa-user-plus"></i> @Localizer.Get("Register", ResourceType.Header)
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/profile">
+                                <i class="fas fa-user-edit"></i> @Localizer.Get("Profile", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/settings">
+                                <i class="fas fa-cog"></i> @Localizer.Get("Settings", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/orders">
+                                <i class="fas fa-box-open"></i> @Localizer.Get("Orders", ResourceType.Header)
+                            </a></li>
+                            <li><a class="dropdown-item" href="/favorites">
+                                <i class="fas fa-heart"></i> @Localizer.Get("Favorites", ResourceType.Header)
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">
+                                <i class="fas fa-sign-out-alt"></i> @Localizer.Get("Logout", ResourceType.Header)
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<style>
+    .header-modern {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+    }
+
+    .brand-logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none !important;
+        color: white !important;
+    }
+
+    .brand-logo i {
+        font-size: 2rem;
+        margin-right: 10px;
+        color: #ffd700;
+    }
+
+    .brand-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .brand-slogan {
+        font-size: 0.7rem;
+        opacity: 0.8;
+        font-style: italic;
+    }
+
+    .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-weight: 500;
+        padding: 0.8rem 1rem !important;
+        border-radius: 6px;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: white !important;
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .navbar-nav .nav-link i {
+        margin-right: 5px;
+    }
+
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+        border-radius: 10px;
+        margin-top: 5px;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #495057;
+        transform: translateX(5px);
+    }
+
+    .dropdown-item i {
+        margin-right: 8px;
+        width: 16px;
+    }
+
+    .search-box .form-control {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 25px 0 0 25px;
+    }
+
+    .search-box .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .search-box .btn {
+        border-radius: 0 25px 25px 0;
+        border-left: none;
+    }
+
+    .cart-dropdown, .notifications-dropdown {
+        min-width: 280px;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+    }
+
+    @@media (max-width: 991px) {
+        .search-box {
+            width: 100%;
+            margin: 1rem 0;
+        }
+        
+        .brand-text {
+            display: none;
+        }
+        
+        .brand-logo i {
+            margin-right: 0;
+        }
+    }
+</style> 

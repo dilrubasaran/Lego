@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" msdata:Ordinal="5" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <!-- Şirket Bilgileri -->
+  <data name="CompanyInfo" xml:space="preserve">
+    <value>Şirket Bilgileri</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="AddressDetails" xml:space="preserve">
+    <value>Maslak Mahallesi, Büyükdere Caddesi No:123/A Kat:15 Şişli/İstanbul</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>+90 212 555 0123</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>info@techcorp.com.tr</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Çalışma Saatleri</value>
+  </data>
+  <data name="WorkingHoursDetails" xml:space="preserve">
+    <value>Pazartesi - Cuma: 09:00 - 18:00</value>
+  </data>
+  
+  <!-- Hızlı Linkler -->
+  <data name="QuickLinks" xml:space="preserve">
+    <value>Hızlı Linkler</value>
+  </data>
+  <data name="AboutUs" xml:space="preserve">
+    <value>Hakkımızda</value>
+  </data>
+  <data name="OurTeam" xml:space="preserve">
+    <value>Ekibimiz</value>
+  </data>
+  <data name="Careers" xml:space="preserve">
+    <value>Kariyer</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>Haberler</value>
+  </data>
+  <data name="Portfolio" xml:space="preserve">
+    <value>Portföy</value>
+  </data>
+  <data name="Testimonials" xml:space="preserve">
+    <value>Referanslar</value>
+  </data>
+  
+  <!-- Hizmetlerimiz -->
+  <data name="OurServices" xml:space="preserve">
+    <value>Hizmetlerimiz</value>
+  </data>
+  <data name="WebDesign" xml:space="preserve">
+    <value>Web Tasarım</value>
+  </data>
+  <data name="MobileAppDevelopment" xml:space="preserve">
+    <value>Mobil Uygulama Geliştirme</value>
+  </data>
+  <data name="DigitalMarketing" xml:space="preserve">
+    <value>Dijital Pazarlama</value>
+  </data>
+  <data name="SEOServices" xml:space="preserve">
+    <value>SEO Hizmetleri</value>
+  </data>
+  <data name="CloudSolutions" xml:space="preserve">
+    <value>Bulut Çözümleri</value>
+  </data>
+  <data name="TechnicalSupport" xml:space="preserve">
+    <value>Teknik Destek</value>
+  </data>
+  
+  <!-- Sosyal Medya -->
+  <data name="FollowUs" xml:space="preserve">
+    <value>Bizi Takip Edin</value>
+  </data>
+  <data name="Facebook" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="Twitter" xml:space="preserve">
+    <value>Twitter</value>
+  </data>
+  <data name="Instagram" xml:space="preserve">
+    <value>Instagram</value>
+  </data>
+  <data name="LinkedIn" xml:space="preserve">
+    <value>LinkedIn</value>
+  </data>
+  <data name="YouTube" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  
+  <!-- Bülten -->
+  <data name="Newsletter" xml:space="preserve">
+    <value>Bülten</value>
+  </data>
+  <data name="NewsletterDescription" xml:space="preserve">
+    <value>Yeniliklerden ve özel tekliflerden haberdar olmak için bültenimize abone olun.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>E-posta adresiniz</value>
+  </data>
+  <data name="Subscribe" xml:space="preserve">
+    <value>Abone Ol</value>
+  </data>
+  <data name="SubscribeSuccess" xml:space="preserve">
+    <value>Başarıyla abone oldunuz!</value>
+  </data>
+  
+  <!-- Yasal -->
+  <data name="Legal" xml:space="preserve">
+    <value>Yasal</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Gizlilik Politikası</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Kullanım Şartları</value>
+  </data>
+  <data name="CookiePolicy" xml:space="preserve">
+    <value>Çerez Politikası</value>
+  </data>
+  <data name="DataProtection" xml:space="preserve">
+    <value>Kişisel Verilerin Korunması</value>
+  </data>
+  <data name="LegalNotices" xml:space="preserve">
+    <value>Yasal Bildirimler</value>
+  </data>
+  
+  <!-- Telif Hakkı -->
+  <data name="Copyright" xml:space="preserve">
+    <value>© 2024 TechCorp. Tüm hakları saklıdır.</value>
+  </data>
+  <data name="AllRightsReserved" xml:space="preserve">
+    <value>Tüm hakları saklıdır</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Destekleyen</value>
+  </data>
+  
+  <!-- Ekstra -->
+  <data name="BackToTop" xml:space="preserve">
+    <value>Yukarı Çık</value>
+  </data>
+  <data name="ContactInfo" xml:space="preserve">
+    <value>İletişim Bilgileri</value>
+  </data>
+  <data name="GetQuote" xml:space="preserve">
+    <value>Teklif Al</value>
+  </data>
+</root> 

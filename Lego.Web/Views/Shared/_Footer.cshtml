@@ -1,0 +1,450 @@
+@using Lego.Localization.Enum
+@inject Lego.Localization.Interfaces.ILocalizationService Localizer
+
+<footer class="footer-modern">
+    <div class="container">
+        <!-- Main Footer Content -->
+        <div class="row">
+            <!-- Company Information -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="footer-section">
+                    <h5 class="footer-title">
+                        <i class="fas fa-building"></i>
+                        @Localizer.Get("CompanyInfo", ResourceType.Footer);
+                    </h5>
+                    <div class="company-details">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>@Localizer.Get("Address", ResourceType.Footer)</strong>
+                                <p>@Localizer.Get("AddressDetails", ResourceType.Footer)</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>@Localizer.Get("Phone", ResourceType.Footer)</strong>
+                                <p>@Localizer.Get("PhoneNumber", ResourceType.Footer)</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>@Localizer.Get("Email", ResourceType.Footer)</strong>
+                                <p>@Localizer.Get("EmailAddress", ResourceType.Footer)</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>@Localizer.Get("WorkingHours", ResourceType.Footer)</strong>
+                                <p>@Localizer.Get("WorkingHoursDetails", ResourceType.Footer)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <div class="footer-section">
+                    <h5 class="footer-title">
+                        <i class="fas fa-link"></i>
+                        @Localizer.Get("QuickLinks", ResourceType.Footer)
+                    </h5>
+                    <ul class="footer-links">
+                        <li><a href="/about"><i class="fas fa-chevron-right"></i> @Localizer.Get("AboutUs", ResourceType.Footer)</a></li>
+                        <li><a href="/team"><i class="fas fa-chevron-right"></i> @Localizer.Get("OurTeam", ResourceType.Footer)</a></li>
+                        <li><a href="/careers"><i class="fas fa-chevron-right"></i> @Localizer.Get("Careers", ResourceType.Footer)</a></li>
+                        <li><a href="/news"><i class="fas fa-chevron-right"></i> @Localizer.Get("News", ResourceType.Footer)</a></li>
+                        <li><a href="/portfolio"><i class="fas fa-chevron-right"></i> @Localizer.Get("Portfolio", ResourceType.Footer)</a></li>
+                        <li><a href="/testimonials"><i class="fas fa-chevron-right"></i> @Localizer.Get("Testimonials", ResourceType.Footer)</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Our Services -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <div class="footer-section">
+                    <h5 class="footer-title">
+                        <i class="fas fa-cogs"></i>
+                        @Localizer.Get("OurServices", ResourceType.Footer)
+                    </h5>
+                    <ul class="footer-links">
+                        <li><a href="/services/web-design"><i class="fas fa-chevron-right"></i> @Localizer.Get("WebDesign", ResourceType.Footer)</a></li>
+                        <li><a href="/services/mobile"><i class="fas fa-chevron-right"></i> @Localizer.Get("MobileAppDevelopment", ResourceType.Footer)</a></li>
+                        <li><a href="/services/marketing"><i class="fas fa-chevron-right"></i> @Localizer.Get("DigitalMarketing", ResourceType.Footer)</a></li>
+                        <li><a href="/services/seo"><i class="fas fa-chevron-right"></i> @Localizer.Get("SEOServices", ResourceType.Footer)</a></li>
+                        <li><a href="/services/cloud"><i class="fas fa-chevron-right"></i> @Localizer.Get("CloudSolutions", ResourceType.Footer)</a></li>
+                        <li><a href="/services/support"><i class="fas fa-chevron-right"></i> @Localizer.Get("TechnicalSupport", ResourceType.Footer)</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Social Media & Newsletter -->
+            <div class="col-lg-5 col-md-6 mb-4">
+                <div class="footer-section">
+                    <!-- Social Media -->
+                    <h5 class="footer-title">
+                        <i class="fas fa-share-alt"></i>
+                        @Localizer.Get("FollowUs", ResourceType.Footer)
+                    </h5>
+                    <div class="social-links mb-4">
+                        <a href="#" class="social-link facebook">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>@Localizer.Get("Facebook", ResourceType.Footer)</span>
+                        </a>
+                        <a href="#" class="social-link twitter">
+                            <i class="fab fa-twitter"></i>
+                            <span>@Localizer.Get("Twitter", ResourceType.Footer)</span>
+                        </a>
+                        <a href="#" class="social-link instagram">
+                            <i class="fab fa-instagram"></i>
+                            <span>@Localizer.Get("Instagram", ResourceType.Footer)</span>
+                        </a>
+                        <a href="#" class="social-link linkedin">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span>@Localizer.Get("LinkedIn", ResourceType.Footer)</span>
+                        </a>
+                        <a href="#" class="social-link youtube">
+                            <i class="fab fa-youtube"></i>
+                            <span>@Localizer.Get("YouTube", ResourceType.Footer)</span>
+                        </a>
+                        <a href="#" class="social-link github">
+                            <i class="fab fa-github"></i>
+                            <span>@Localizer.Get("GitHub", ResourceType.Footer)</span>
+                        </a>
+                    </div>
+
+                    <!-- Newsletter -->
+                    <h5 class="footer-title">
+                        <i class="fas fa-newspaper"></i>
+                        @Localizer.Get("Newsletter", ResourceType.Footer)
+                    </h5>
+                    <p class="newsletter-description">
+                        @Localizer.Get("NewsletterDescription", ResourceType.Footer)
+                    </p>
+                    <div class="newsletter-form">
+                        <div class="input-group">
+                            <input type="email" class="form-control" 
+                                   placeholder="@Localizer.Get("EmailPlaceholder", ResourceType.Footer)"
+                                   id="newsletterEmail">
+                            <button class="btn btn-primary" type="button" onclick="subscribeNewsletter()">
+                                <i class="fas fa-paper-plane"></i>
+                                @Localizer.Get("Subscribe", ResourceType.Footer)
+                            </button>
+                        </div>
+                        <div id="newsletterMessage" class="mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12 mb-3 mb-lg-0">
+                    <div class="copyright">
+                        @Localizer.Get("Copyright", ResourceType.Footer)
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="legal-links">
+                        <h6 class="legal-title">@Localizer.Get("Legal", ResourceType.Footer)</h6>
+                        <div class="legal-menu">
+                            <a href="/privacy">@Localizer.Get("PrivacyPolicy", ResourceType.Footer)</a>
+                            <a href="/terms">@Localizer.Get("TermsOfService", ResourceType.Footer)</a>
+                            <a href="/cookies">@Localizer.Get("CookiePolicy", ResourceType.Footer)</a>
+                            <a href="/data-protection">@Localizer.Get("DataProtection", ResourceType.Footer)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Top Button -->
+        <button class="back-to-top" onclick="scrollToTop()" title="@Localizer.Get("BackToTop", ResourceType.Footer)">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    </div>
+</footer>
+
+<style>
+    .footer-modern {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 3rem 0 0 0;
+        margin-top: 4rem;
+        position: relative;
+    }
+
+    .footer-section {
+        height: 100%;
+    }
+
+    .footer-title {
+        color: #3498db;
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+
+    .footer-title i {
+        margin-right: 8px;
+        width: 20px;
+    }
+
+    .company-details .contact-item {
+        display: flex;
+        margin-bottom: 1rem;
+        align-items: flex-start;
+    }
+
+    .company-details .contact-item i {
+        margin-right: 10px;
+        margin-top: 5px;
+        color: #3498db;
+        width: 16px;
+    }
+
+    .company-details .contact-item strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #ecf0f1;
+    }
+
+    .company-details .contact-item p {
+        margin: 0;
+        color: #bdc3c7;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+        color: #bdc3c7;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+
+    .footer-links a i {
+        margin-right: 8px;
+        font-size: 0.7rem;
+        color: #3498db;
+    }
+
+    .footer-links a:hover {
+        color: #3498db;
+        transform: translateX(5px);
+    }
+
+    .social-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .social-link {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 25px;
+        text-decoration: none;
+        color: white;
+        transition: all 0.3s ease;
+        font-size: 0.85rem;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .social-link i {
+        margin-right: 6px;
+        width: 16px;
+    }
+
+    .social-link:hover {
+        transform: translateY(-2px);
+        color: white;
+        text-decoration: none;
+    }
+
+    .social-link.facebook:hover { background-color: #3b5998; }
+    .social-link.twitter:hover { background-color: #1da1f2; }
+    .social-link.instagram:hover { background-color: #e4405f; }
+    .social-link.linkedin:hover { background-color: #0077b5; }
+    .social-link.youtube:hover { background-color: #ff0000; }
+    .social-link.github:hover { background-color: #333; }
+
+    .newsletter-description {
+        color: #bdc3c7;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .newsletter-form .form-control {
+        background-color: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        border-radius: 25px 0 0 25px;
+    }
+
+    .newsletter-form .form-control::placeholder {
+        color: rgba(255,255,255,0.7);
+    }
+
+    .newsletter-form .btn {
+        border-radius: 0 25px 25px 0;
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        border: none;
+        font-weight: 500;
+    }
+
+    .footer-bottom {
+        margin-top: 2rem;
+        padding: 1.5rem 0;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        background-color: rgba(0,0,0,0.2);
+    }
+
+    .copyright {
+        color: #bdc3c7;
+        font-size: 0.9rem;
+    }
+
+    .legal-title {
+        color: #3498db;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .legal-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .legal-menu a {
+        color: #bdc3c7;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.3s ease;
+    }
+
+    .legal-menu a:hover {
+        color: #3498db;
+    }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        display: none;
+    }
+
+    .back-to-top:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    }
+
+    .back-to-top.show {
+        display: block;
+    }
+
+    @@media (max-width: 768px) {
+        .footer-modern {
+            padding: 2rem 0 0 0;
+        }
+        
+        .social-links {
+            justify-content: center;
+        }
+        
+        .legal-menu {
+            justify-content: center;
+        }
+        
+        .footer-title {
+            text-align: center;
+        }
+        
+        .newsletter-form .input-group {
+            flex-direction: column;
+        }
+        
+        .newsletter-form .form-control,
+        .newsletter-form .btn {
+            border-radius: 25px;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+<script type="text/javascript">
+    function subscribeNewsletter() {
+        const email = document.getElementById('newsletterEmail').value;
+        const messageDiv = document.getElementById('newsletterMessage');
+        
+        if (!email || !email.includes('@@')) {
+            messageDiv.innerHTML = '<div class="text-warning"><i class="fas fa-exclamation-triangle"></i> Geçerli bir e-posta adresi girin</div>';
+            return;
+        }
+        
+        // Simulate subscription
+        const successMessage = '@Html.Raw(Localizer.Get("SubscribeSuccess", ResourceType.Footer))';
+        messageDiv.innerHTML = '<div class="text-success"><i class="fas fa-check"></i> ' + successMessage + '</div>';
+        document.getElementById('newsletterEmail').value = '';
+        
+        setTimeout(function() {
+            messageDiv.innerHTML = '';
+        }, 3000);
+    }
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // Show/hide back to top button
+    window.addEventListener('scroll', function() {
+        const backToTopBtn = document.querySelector('.back-to-top');
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('show');
+        } else {
+            backToTopBtn.classList.remove('show');
+        }
+    });
+
+    // Enter key support for newsletter
+    document.getElementById('newsletterEmail')?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            subscribeNewsletter();
+        }
+    });
+</script> 

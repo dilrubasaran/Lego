@@ -1,9 +1,13 @@
-﻿@inject Lego.Localization.Services.LocalizationService Localizer
+﻿@using Lego.Localization.Enum
+@inject Lego.Localization.Interfaces.ILocalizationService Localizer
 
 @{
-    ViewData["Title"] = Localizer.GetLocalizedHTML("Language");
+    ViewData["Title"] = Localizer.Get("Language", ResourceType.SharedResource);
     var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
 }
+
+<!-- Include Header Partial -->
+@await Html.PartialAsync("_Header")
 
 <style>
     .language-switcher {
@@ -86,26 +90,16 @@
     }
 </style>
 
-<!-- Language Switcher -->
-<div class="language-switcher">
-    <a href="/Home/ChangeLanguage?culture=tr-TR" 
-       class="lang-btn @(currentCulture.StartsWith("tr") ? "active" : "")">
-        🇹🇷 @Localizer.GetLocalizedHTML("Turkish")
-    </a>
-    <a href="/Home/ChangeLanguage?culture=en" 
-       class="lang-btn @(currentCulture.StartsWith("en") ? "active" : "")">
-        🇺🇸 @Localizer.GetLocalizedHTML("English")
-    </a>
-</div>
 
-<div class="container-fluid mt-4">
+
+<div class="container-fluid">
     <!-- Welcome Section -->
     <div class="welcome-section">
         <h1 class="display-4">
             <i class="fas fa-globe"></i> 
-            @Localizer.GetLocalizedHTML("Welcome")
+            @Localizer.Get("Welcome", ResourceType.SharedResource)
         </h1>
-        <p class="lead">@Localizer.GetLocalizedHTML("Language") Demo</p>
+        <p class="lead">@Localizer.Get("Language", ResourceType.SharedResource) Demo</p>
         <small>Current Culture: <strong>@currentCulture</strong></small>
     </div>
 
@@ -114,20 +108,20 @@
         <div class="col-md-6 mb-4">
             <div class="demo-card">
                 <div class="gradient-header p-3">
-                    <h4><i class="fas fa-navigation"></i> @Localizer.GetLocalizedHTML("Home") & Actions</h4>
+                    <h4><i class="fas fa-navigation"></i> @Localizer.Get("Home", ResourceType.SharedResource) & Actions</h4>
                 </div>
                 <div class="card-body">
                     <div class="text-demo">
-                        <h5>📍 @Localizer.GetLocalizedHTML("Home")</h5>
-                        <p>🔗 @Localizer.GetLocalizedHTML("About") | @Localizer.GetLocalizedHTML("Contact")</p>
-                        <p>📄 @Localizer.GetLocalizedHTML("Details") | @Localizer.GetLocalizedHTML("Files")</p>
+                        <h5>📍 @Localizer.Get("Home", ResourceType.SharedResource)</h5>
+                        <p>🔗 @Localizer.Get("About", ResourceType.SharedResource) | @Localizer.Get("Contact", ResourceType.SharedResource)</p>
+                        <p>📄 @Localizer.Get("Details", ResourceType.SharedResource) | @Localizer.Get("Files", ResourceType.SharedResource)</p>
                     </div>
                     
                     <div class="mt-3">
-                        <button class="btn btn-primary btn-demo">@Localizer.GetLocalizedHTML("Login")</button>
-                        <button class="btn btn-success btn-demo">@Localizer.GetLocalizedHTML("Save")</button>
-                        <button class="btn btn-warning btn-demo">@Localizer.GetLocalizedHTML("Edit")</button>
-                        <button class="btn btn-danger btn-demo">@Localizer.GetLocalizedHTML("Delete")</button>
+                        <button class="btn btn-primary btn-demo">@Localizer.Get("Login", ResourceType.SharedResource)</button>
+                        <button class="btn btn-success btn-demo">@Localizer.Get("Save", ResourceType.SharedResource)</button>
+                        <button class="btn btn-warning btn-demo">@Localizer.Get("Edit", ResourceType.SharedResource)</button>
+                        <button class="btn btn-danger btn-demo">@Localizer.Get("Delete", ResourceType.SharedResource)</button>
                     </div>
                 </div>
             </div>
@@ -137,21 +131,21 @@
         <div class="col-md-6 mb-4">
             <div class="demo-card">
                 <div class="gradient-header p-3">
-                    <h4><i class="fas fa-user-circle"></i> @Localizer.GetLocalizedHTML("Login") Form</h4>
+                    <h4><i class="fas fa-user-circle"></i> @Localizer.Get("Login", ResourceType.SharedResource) Form</h4>
                 </div>
                 <div class="card-body">
                     <form>
                         <div class="mb-3">
-                            <label class="form-label">@Localizer.GetLocalizedHTML("Username")</label>
-                            <input type="text" class="form-control" placeholder="@Localizer.GetLocalizedHTML("Username")">
+                            <label class="form-label">@Localizer.Get("Username", ResourceType.SharedResource)</label>
+                            <input type="text" class="form-control" placeholder="@Localizer.Get("Username", ResourceType.SharedResource)">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">@Localizer.GetLocalizedHTML("Password")</label>
-                            <input type="password" class="form-control" placeholder="@Localizer.GetLocalizedHTML("Password")">
+                            <label class="form-label">@Localizer.Get("Password", ResourceType.SharedResource)</label>
+                            <input type="password" class="form-control" placeholder="@Localizer.Get("Password", ResourceType.SharedResource)">
                         </div>
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">@Localizer.GetLocalizedHTML("Submit")</button>
-                            <button type="button" class="btn btn-secondary">@Localizer.GetLocalizedHTML("Cancel")</button>
+                            <button type="submit" class="btn btn-primary">@Localizer.Get("Submit", ResourceType.SharedResource)</button>
+                            <button type="button" class="btn btn-secondary">@Localizer.Get("Cancel", ResourceType.SharedResource)</button>
                         </div>
                     </form>
                 </div>
@@ -166,16 +160,16 @@
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info">
-                        <i class="fas fa-spinner fa-spin"></i> @Localizer.GetLocalizedHTML("Loading")
+                        <i class="fas fa-spinner fa-spin"></i> @Localizer.Get("Loading", ResourceType.SharedResource)
                     </div>
                     <div class="alert alert-success">
-                        <i class="fas fa-check"></i> @Localizer.GetLocalizedHTML("Welcome")!
+                        <i class="fas fa-check"></i> @Localizer.Get("Welcome", ResourceType.SharedResource)!
                     </div>
                     <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle"></i> @Localizer.GetLocalizedHTML("AccessDenied")
+                        <i class="fas fa-exclamation-triangle"></i> @Localizer.Get("AccessDenied", ResourceType.SharedResource)
                     </div>
                     <div class="alert alert-danger">
-                        <i class="fas fa-times"></i> @Localizer.GetLocalizedHTML("NotFound")
+                        <i class="fas fa-times"></i> @Localizer.Get("NotFound", ResourceType.SharedResource)
                     </div>
                 </div>
             </div>
@@ -191,10 +185,10 @@
                     <div class="text-demo">
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-outline-primary">
-                                <i class="fas fa-chevron-left"></i> @Localizer.GetLocalizedHTML("Previous")
+                                <i class="fas fa-chevron-left"></i> @Localizer.Get("Previous", ResourceType.SharedResource)
                             </button>
                             <button class="btn btn-outline-primary">
-                                @Localizer.GetLocalizedHTML("Next") <i class="fas fa-chevron-right"></i>
+                                @Localizer.Get("Next", ResourceType.SharedResource) <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
                     </div>
@@ -202,16 +196,16 @@
                     <div class="text-demo">
                         <h6>Confirmation:</h6>
                         <button class="btn btn-success me-2">
-                            <i class="fas fa-check"></i> @Localizer.GetLocalizedHTML("Yes")
+                            <i class="fas fa-check"></i> @Localizer.Get("Yes", ResourceType.SharedResource)
                         </button>
                         <button class="btn btn-danger">
-                            <i class="fas fa-times"></i> @Localizer.GetLocalizedHTML("No")
+                            <i class="fas fa-times"></i> @Localizer.Get("No", ResourceType.SharedResource)
                         </button>
                     </div>
                     
                     <div class="text-demo">
                         <button class="btn btn-info">
-                            <i class="fas fa-sign-out-alt"></i> @Localizer.GetLocalizedHTML("Logout")
+                            <i class="fas fa-sign-out-alt"></i> @Localizer.Get("Logout", ResourceType.SharedResource)
                         </button>
                     </div>
                 </div>
@@ -230,25 +224,25 @@
                             <div class="text-demo">
                                 <h6><i class="fas fa-cog"></i> Actions Dropdown</h6>
                                 <select class="form-select" id="actionsDropdown">
-                                    <option value="">@Localizer.GetLocalizedHTML("Save")</option>
-                                    <option value="edit">@Localizer.GetLocalizedHTML("Edit")</option>
-                                    <option value="delete">@Localizer.GetLocalizedHTML("Delete")</option>
-                                    <option value="details">@Localizer.GetLocalizedHTML("Details")</option>
-                                    <option value="cancel">@Localizer.GetLocalizedHTML("Cancel")</option>
+                                    <option value="">@Localizer.Get("Save", ResourceType.SharedResource)</option>
+                                    <option value="edit">@Localizer.Get("Edit", ResourceType.SharedResource)</option>
+                                    <option value="delete">@Localizer.Get("Delete", ResourceType.SharedResource)</option>
+                                    <option value="details">@Localizer.Get("Details", ResourceType.SharedResource)</option>
+                                    <option value="cancel">@Localizer.Get("Cancel", ResourceType.SharedResource)</option>
                                 </select>
                             </div>
                         </div>
                         
                         <div class="col-md-4">
                             <div class="text-demo">
-                                <h6><i class="fas fa-globe"></i> @Localizer.GetLocalizedHTML("Language") Selection</h6>
+                                <h6><i class="fas fa-globe"></i> @Localizer.Get("Language", ResourceType.SharedResource) Selection</h6>
                                 <select class="form-select" id="languageDropdown">
-                                    <option value="">-- @Localizer.GetLocalizedHTML("Language") --</option>
+                                    <option value="">-- @Localizer.Get("Language", ResourceType.SharedResource) --</option>
                                     <option value="tr" selected="@(currentCulture.StartsWith("tr"))">
-                                        🇹🇷 @Localizer.GetLocalizedHTML("Turkish")
+                                        🇹🇷 @Localizer.Get("Turkish", ResourceType.SharedResource)
                                     </option>
                                     <option value="en" selected="@(currentCulture.StartsWith("en"))">
-                                        🇺🇸 @Localizer.GetLocalizedHTML("English")
+                                        🇺🇸 @Localizer.Get("English", ResourceType.SharedResource)
                                     </option>
                                 </select>
                             </div>
@@ -258,11 +252,11 @@
                             <div class="text-demo">
                                 <h6><i class="fas fa-folder"></i> Navigation Menu</h6>
                                 <select class="form-select" id="navigationDropdown">
-                                    <option value="">-- @Localizer.GetLocalizedHTML("Home") --</option>
-                                    <option value="home">🏠 @Localizer.GetLocalizedHTML("Home")</option>
-                                    <option value="about">ℹ️ @Localizer.GetLocalizedHTML("About")</option>
-                                    <option value="contact">📞 @Localizer.GetLocalizedHTML("Contact")</option>
-                                    <option value="files">📁 @Localizer.GetLocalizedHTML("Files")</option>
+                                    <option value="">-- @Localizer.Get("Home", ResourceType.SharedResource) --</option>
+                                    <option value="home">🏠 @Localizer.Get("Home", ResourceType.SharedResource)</option>
+                                    <option value="about">ℹ️ @Localizer.Get("About", ResourceType.SharedResource)</option>
+                                    <option value="contact">📞 @Localizer.Get("Contact", ResourceType.SharedResource)</option>
+                                    <option value="files">📁 @Localizer.Get("Files", ResourceType.SharedResource)</option>
                                 </select>
                             </div>
                         </div>
@@ -273,10 +267,10 @@
                             <div class="text-demo">
                                 <h6><i class="fas fa-user-check"></i> User Actions</h6>
                                 <select class="form-select" id="userActionsDropdown" multiple size="4">
-                                    <option value="login">🔐 @Localizer.GetLocalizedHTML("Login")</option>
-                                    <option value="logout">🚪 @Localizer.GetLocalizedHTML("Logout")</option>
-                                    <option value="save">💾 @Localizer.GetLocalizedHTML("Save")</option>
-                                    <option value="submit">📤 @Localizer.GetLocalizedHTML("Submit")</option>
+                                    <option value="login">🔐 @Localizer.Get("Login", ResourceType.SharedResource)</option>
+                                    <option value="logout">🚪 @Localizer.Get("Logout", ResourceType.SharedResource)</option>
+                                    <option value="save">💾 @Localizer.Get("Save", ResourceType.SharedResource)</option>
+                                    <option value="submit">📤 @Localizer.Get("Submit", ResourceType.SharedResource)</option>
                                 </select>
                                 <small class="text-muted">Multi-select dropdown</small>
                             </div>
@@ -286,10 +280,10 @@
                             <div class="text-demo">
                                 <h6><i class="fas fa-question-circle"></i> Confirmation Options</h6>
                                 <select class="form-select" id="confirmationDropdown">
-                                    <option value="">-- @Localizer.GetLocalizedHTML("Submit") --</option>
-                                    <option value="yes" class="text-success">✅ @Localizer.GetLocalizedHTML("Yes")</option>
-                                    <option value="no" class="text-danger">❎ @Localizer.GetLocalizedHTML("No")</option>
-                                    <option value="cancel" class="text-warning">❌ @Localizer.GetLocalizedHTML("Cancel")</option>
+                                    <option value="">-- @Localizer.Get("Submit", ResourceType.SharedResource) --</option>
+                                    <option value="yes" class="text-success">✅ @Localizer.Get("Yes", ResourceType.SharedResource)</option>
+                                    <option value="no" class="text-danger">❎ @Localizer.Get("No", ResourceType.SharedResource)</option>
+                                    <option value="cancel" class="text-warning">❌ @Localizer.Get("Cancel", ResourceType.SharedResource)</option>
                                 </select>
                             </div>
                         </div>
@@ -300,15 +294,15 @@
                         <div class="alert alert-info">
                             <h6><i class="fas fa-info-circle"></i> Dropdown Test Instructions:</h6>
                             <ul class="mb-0">
-                                <li>🇹🇷 <strong>@Localizer.GetLocalizedHTML("Turkish")</strong>: Dil değiştir ve dropdown seçeneklerinin değiştiğini gör</li>
-                                <li>🇺🇸 <strong>@Localizer.GetLocalizedHTML("English")</strong>: Dil değiştir ve dropdown seçeneklerinin güncellendiğini gör</li>
+                                <li>🇹🇷 <strong>@Localizer.Get("Turkish", ResourceType.SharedResource)</strong>: Dil değiştir ve dropdown seçeneklerinin değiştiğini gör</li>
+                                <li>🇺🇸 <strong>@Localizer.Get("English", ResourceType.SharedResource)</strong>: Dil değiştir ve dropdown seçeneklerinin güncellendiğini gör</li>
                                 <li>🔄 Çoklu dropdown türleri farklı senaryoları test eder</li>
                             </ul>
                         </div>
                         
                         <div id="dropdownResult" class="alert alert-secondary">
                             <strong>Seçilen Değer Görüntüle:</strong> 
-                            <span id="selectedValueDisplay">@Localizer.GetLocalizedHTML("Loading")</span>
+                            <span id="selectedValueDisplay">@Localizer.Get("Loading", ResourceType.SharedResource)</span>
                         </div>
                     </div>
                 </div>
@@ -334,31 +328,31 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>Welcome</td><td>@Localizer.GetLocalizedHTML("Welcome")</td><td>👋</td></tr>
-                                <tr><td>Home</td><td>@Localizer.GetLocalizedHTML("Home")</td><td>🏠</td></tr>
-                                <tr><td>About</td><td>@Localizer.GetLocalizedHTML("About")</td><td>ℹ️</td></tr>
-                                <tr><td>Contact</td><td>@Localizer.GetLocalizedHTML("Contact")</td><td>📞</td></tr>
-                                <tr><td>Login</td><td>@Localizer.GetLocalizedHTML("Login")</td><td>🔐</td></tr>
-                                <tr><td>Logout</td><td>@Localizer.GetLocalizedHTML("Logout")</td><td>🚪</td></tr>
-                                <tr><td>Username</td><td>@Localizer.GetLocalizedHTML("Username")</td><td>👤</td></tr>
-                                <tr><td>Password</td><td>@Localizer.GetLocalizedHTML("Password")</td><td>🔑</td></tr>
-                                <tr><td>Language</td><td>@Localizer.GetLocalizedHTML("Language")</td><td>🌍</td></tr>
-                                <tr><td>English</td><td>@Localizer.GetLocalizedHTML("English")</td><td>🇺🇸</td></tr>
-                                <tr><td>Turkish</td><td>@Localizer.GetLocalizedHTML("Turkish")</td><td>🇹🇷</td></tr>
-                                <tr><td>Loading</td><td>@Localizer.GetLocalizedHTML("Loading")</td><td>⏳</td></tr>
-                                <tr><td>Save</td><td>@Localizer.GetLocalizedHTML("Save")</td><td>💾</td></tr>
-                                <tr><td>Edit</td><td>@Localizer.GetLocalizedHTML("Edit")</td><td>✏️</td></tr>
-                                <tr><td>Delete</td><td>@Localizer.GetLocalizedHTML("Delete")</td><td>🗑️</td></tr>
-                                <tr><td>Submit</td><td>@Localizer.GetLocalizedHTML("Submit")</td><td>📤</td></tr>
-                                <tr><td>Cancel</td><td>@Localizer.GetLocalizedHTML("Cancel")</td><td>❌</td></tr>
-                                <tr><td>Yes</td><td>@Localizer.GetLocalizedHTML("Yes")</td><td>✅</td></tr>
-                                <tr><td>No</td><td>@Localizer.GetLocalizedHTML("No")</td><td>❎</td></tr>
-                                <tr><td>Details</td><td>@Localizer.GetLocalizedHTML("Details")</td><td>📋</td></tr>
-                                <tr><td>Files</td><td>@Localizer.GetLocalizedHTML("Files")</td><td>📁</td></tr>
-                                <tr><td>Previous</td><td>@Localizer.GetLocalizedHTML("Previous")</td><td>⬅️</td></tr>
-                                <tr><td>Next</td><td>@Localizer.GetLocalizedHTML("Next")</td><td>➡️</td></tr>
-                                <tr><td>AccessDenied</td><td>@Localizer.GetLocalizedHTML("AccessDenied")</td><td>🚫</td></tr>
-                                <tr><td>NotFound</td><td>@Localizer.GetLocalizedHTML("NotFound")</td><td>❓</td></tr>
+                                <tr><td>Welcome</td><td>@Localizer.Get("Welcome", ResourceType.SharedResource)</td><td>👋</td></tr>
+                                <tr><td>Home</td><td>@Localizer.Get("Home", ResourceType.SharedResource)</td><td>🏠</td></tr>
+                                <tr><td>About</td><td>@Localizer.Get("About", ResourceType.SharedResource)</td><td>ℹ️</td></tr>
+                                <tr><td>Contact</td><td>@Localizer.Get("Contact", ResourceType.SharedResource)</td><td>📞</td></tr>
+                                <tr><td>Login</td><td>@Localizer.Get("Login", ResourceType.SharedResource)</td><td>🔐</td></tr>
+                                <tr><td>Logout</td><td>@Localizer.Get("Logout", ResourceType.SharedResource)</td><td>🚪</td></tr>
+                                <tr><td>Username</td><td>@Localizer.Get("Username", ResourceType.SharedResource)</td><td>👤</td></tr>
+                                <tr><td>Password</td><td>@Localizer.Get("Password", ResourceType.SharedResource)</td><td>🔑</td></tr>
+                                <tr><td>Language</td><td>@Localizer.Get("Language", ResourceType.SharedResource)</td><td>🌍</td></tr>
+                                <tr><td>English</td><td>@Localizer.Get("English", ResourceType.SharedResource)</td><td>🇺🇸</td></tr>
+                                <tr><td>Turkish</td><td>@Localizer.Get("Turkish", ResourceType.SharedResource)</td><td>🇹🇷</td></tr>
+                                <tr><td>Loading</td><td>@Localizer.Get("Loading", ResourceType.SharedResource)</td><td>⏳</td></tr>
+                                <tr><td>Save</td><td>@Localizer.Get("Save", ResourceType.SharedResource)</td><td>💾</td></tr>
+                                <tr><td>Edit</td><td>@Localizer.Get("Edit", ResourceType.SharedResource)</td><td>✏️</td></tr>
+                                <tr><td>Delete</td><td>@Localizer.Get("Delete", ResourceType.SharedResource)</td><td>🗑️</td></tr>
+                                <tr><td>Submit</td><td>@Localizer.Get("Submit", ResourceType.SharedResource)</td><td>📤</td></tr>
+                                <tr><td>Cancel</td><td>@Localizer.Get("Cancel", ResourceType.SharedResource)</td><td>❌</td></tr>
+                                <tr><td>Yes</td><td>@Localizer.Get("Yes", ResourceType.SharedResource)</td><td>✅</td></tr>
+                                <tr><td>No</td><td>@Localizer.Get("No", ResourceType.SharedResource)</td><td>❎</td></tr>
+                                <tr><td>Details</td><td>@Localizer.Get("Details", ResourceType.SharedResource)</td><td>📋</td></tr>
+                                <tr><td>Files</td><td>@Localizer.Get("Files", ResourceType.SharedResource)</td><td>📁</td></tr>
+                                <tr><td>Previous</td><td>@Localizer.Get("Previous", ResourceType.SharedResource)</td><td>⬅️</td></tr>
+                                <tr><td>Next</td><td>@Localizer.Get("Next", ResourceType.SharedResource)</td><td>➡️</td></tr>
+                                <tr><td>AccessDenied</td><td>@Localizer.Get("AccessDenied", ResourceType.SharedResource)</td><td>🚫</td></tr>
+                                <tr><td>NotFound</td><td>@Localizer.Get("NotFound", ResourceType.SharedResource)</td><td>❓</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -455,3 +449,6 @@
         selectedValueDisplay.className = 'text-muted';
     });
 </script>
+
+<!-- Include Footer Partial -->
+@await Html.PartialAsync("_Footer")
