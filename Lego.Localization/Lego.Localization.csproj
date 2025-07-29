@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Lego.Contexts\Lego.Contexts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

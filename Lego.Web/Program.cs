@@ -1,10 +1,9 @@
 using Lego.Contexts;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using Lego.Localization.Interfaces;
 using Lego.Localization.Services;
 using Microsoft.Extensions.Options;
+using Lego.Localization.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,20 +19,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// ?? Request Localization ayarlar�
-builder.Services.Configure<RequestLocalizationOptions>(options =>
-{
-    var supportedCultures = new[] { new CultureInfo("tr-TR"), new CultureInfo("en-US") };
-    options.DefaultRequestCulture = new RequestCulture("tr-TR");
-    options.SupportedCultures = supportedCultures;
-    options.SupportedUICultures = supportedCultures;
 
-    options.RequestCultureProviders = new List<IRequestCultureProvider>
-    {
-        new CookieRequestCultureProvider(),
-        new AcceptLanguageHeaderRequestCultureProvider()
-    };
-});
+
+builder.Services.AddProjectLocalization();
+
 
 // ?? DI Servisleri
 builder.Services.AddSingleton<ILocalizationService, LocalizationService>();
@@ -55,6 +44,8 @@ app.UseRouting();
 // ? Localization middleware
 var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(localizationOptions.Value);
+
+
 
 app.UseAuthorization();
 
