@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lego.Web", "Lego.Web\Lego.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lego.Contexts", "Lego.Contexts\Lego.Contexts.csproj", "{5F3D8017-2339-4027-8A23-7C14E67CB1ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lego.RateLimiting", "Lego.RateLimiting\Lego.RateLimiting.csproj", "{D276B313-E522-4F7C-A978-7653043F4BBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lego.API", "Lego.API\Lego.API.csproj", "{C17E9D09-2FB7-4F71-B5E4-D958F4ED71DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{5F3D8017-2339-4027-8A23-7C14E67CB1ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F3D8017-2339-4027-8A23-7C14E67CB1ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F3D8017-2339-4027-8A23-7C14E67CB1ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D276B313-E522-4F7C-A978-7653043F4BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D276B313-E522-4F7C-A978-7653043F4BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D276B313-E522-4F7C-A978-7653043F4BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D276B313-E522-4F7C-A978-7653043F4BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C17E9D09-2FB7-4F71-B5E4-D958F4ED71DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17E9D09-2FB7-4F71-B5E4-D958F4ED71DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17E9D09-2FB7-4F71-B5E4-D958F4ED71DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17E9D09-2FB7-4F71-B5E4-D958F4ED71DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
