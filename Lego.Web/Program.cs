@@ -13,8 +13,8 @@ builder.Services.AddControllersWithViews();
 // ?? Localization deste�i
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-// ?? DB Context
-builder.Services.AddDbContext<AppDbContext>(options =>
+// ?? DB Context - Web projesi için WebDbContext kullan
+builder.Services.AddDbContext<WebDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
