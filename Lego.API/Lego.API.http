@@ -1,2 +1,19 @@
-@Lego.API_HostAddress = http://localhost:5144
+@Lego.API_HostAddress = https://localhost:7087
+
+### Public endpoint test
+GET {{Lego.API_HostAddress}}/api/RateLimiting/public
+
+### Private endpoint test
+GET {{Lego.API_HostAddress}}/api/RateLimiting/private
+
+### Submit endpoint test
+POST {{Lego.API_HostAddress}}/api/RateLimiting/submit
+Content-Type: application/json
+
+{
+  "content": "Test verisi"
+}
+
+### IP specific endpoint test
+GET {{Lego.API_HostAddress}}/api/RateLimiting/ip-specific
 

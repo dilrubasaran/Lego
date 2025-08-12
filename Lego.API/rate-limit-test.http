@@ -1,0 +1,32 @@
+@Lego.API_HostAddress = https://localhost:7087
+
+### Test 1: Private endpoint (1dk/3 istek limiti)
+GET {{Lego.API_HostAddress}}/api/RateLimiting/private
+
+
+### Test 2: Public endpoint (farklı limit)
+GET {{Lego.API_HostAddress}}/api/RateLimiting/public
+
+### Test 3: Submit endpoint (en düşük limit - 1dk/2)
+POST {{Lego.API_HostAddress}}/api/RateLimiting/submit
+Content-Type: application/json
+
+{
+  "content": "Test data 1"
+}
+
+### Test 4: Submit endpoint (2. istek)
+POST {{Lego.API_HostAddress}}/api/RateLimiting/submit
+Content-Type: application/json
+
+{
+  "content": "Test data 2"
+}
+
+### Test 5: Submit endpoint (3. istek - Bu 429 dönmeli)
+POST {{Lego.API_HostAddress}}/api/RateLimiting/submit
+Content-Type: application/json
+
+{
+  "content": "Test data 3 - Should be limited"
+}

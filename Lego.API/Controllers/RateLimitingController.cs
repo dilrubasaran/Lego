@@ -1,3 +1,4 @@
+using Lego.API.DTOs.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
 
 // Rate limiting test controller'ı. Farklı endpoint'ler için rate limiting kurallarını test etmek için kullanılır.
@@ -7,17 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 [Produces("application/json")]
 public class RateLimitingController : ControllerBase
 {
-    // Herkesin erişebileceği public endpoint. 1 dakikada 5 istek limiti var.
-    
-    /// <summary>
-    /// Public erişim endpoint'i. Herkes bu endpoint'e erişebilir.
-    /// </summary>
-    /// <remarks>
-    /// Bu endpoint 1 dakikada maksimum 5 istek kabul eder.
-    /// Rate limit aşıldığında HTTP 429 (Too Many Requests) döner.
-    /// </remarks>
-    /// <response code="200">Başarılı erişim</response>
-    /// <response code="429">Rate limit aşıldı</response>
+    public RateLimitingController()
+    {
+    }
+    // public endpoint. 1 dakikada 5 istek limiti var.
     [HttpGet("public")]
     [ProducesResponseType(typeof(RateLimitResponse), 200)]
     [ProducesResponseType(typeof(RateLimitErrorResponse), 429)]
@@ -32,17 +26,7 @@ public class RateLimitingController : ControllerBase
         });
     }
     
-    // Sınırlı erişim alanı. 1 dakikada 3 istek limiti var.
-    
-    /// <summary>
-    /// Private erişim endpoint'i. Sınırlı erişim alanı.
-    /// </summary>
-    /// <remarks>
-    /// Bu endpoint 1 dakikada maksimum 3 istek kabul eder.
-    /// Rate limit aşıldığında HTTP 429 (Too Many Requests) döner.
-    /// </remarks>
-    /// <response code="200">Başarılı erişim</response>
-    /// <response code="429">Rate limit aşıldı</response>
+    //Private erişim endpoint'i. 1 dakikada 3 istek limiti var.
     [HttpGet("private")]
     [ProducesResponseType(typeof(RateLimitResponse), 200)]
     [ProducesResponseType(typeof(RateLimitErrorResponse), 429)]
@@ -57,19 +41,8 @@ public class RateLimitingController : ControllerBase
         });
     }
     
-    // Veri gönderme endpoint'i. 1 dakikada 2 istek limiti var.
-    
-    /// <summary>
-    /// Veri gönderme endpoint'i. POST isteği ile veri alır.
-    /// </summary>
-    /// <remarks>
-    /// Bu endpoint 1 dakikada maksimum 2 istek kabul eder.
-    /// Rate limit aşıldığında HTTP 429 (Too Many Requests) döner.
-    /// </remarks>
-    /// <param name="data">Gönderilecek veri</param>
-    /// <response code="200">Veri başarıyla alındı</response>
-    /// <response code="400">Geçersiz veri</response>
-    /// <response code="429">Rate limit aşıldı</response>
+    //POST Veri gönderme endpoint'i. 1 dakikada 2 istek limiti var.
+
     [HttpPost("submit")]
     [ProducesResponseType(typeof(SubmitDataResponse), 200)]
     [ProducesResponseType(typeof(RateLimitErrorResponse), 400)]
@@ -96,18 +69,7 @@ public class RateLimitingController : ControllerBase
         });
     }
     
-    // IP bazlı rate limiting test endpoint'i. Genel kurala tabi (1dk/10 istek).
-    
-    /// <summary>
-    /// IP bazlı rate limiting test endpoint'i.
-    /// </summary>
-    /// <remarks>
-    /// Bu endpoint genel rate limiting kuralına tabidir (1dk/10 istek).
-    /// Her IP adresi için ayrı sayaç tutulur.
-    /// Rate limit aşıldığında HTTP 429 (Too Many Requests) döner.
-    /// </remarks>
-    /// <response code="200">Başarılı erişim</response>
-    /// <response code="429">Rate limit aşıldı</response>
+    // IP bazlı rate limiting test endpoint'i. Genel kurala tabi (1dk/10 istek)..
     [HttpGet("ip-specific")]
     [ProducesResponseType(typeof(RateLimitResponse), 200)]
     [ProducesResponseType(typeof(RateLimitErrorResponse), 429)]
@@ -124,72 +86,10 @@ public class RateLimitingController : ControllerBase
             Status = "success"
         });
     }
+
+
+
 }
 
-// Response model'leri
-public class RateLimitResponse
-{
-    /// <summary>
-    /// Response mesajı
-    /// </summary>
-    public string Message { get; set; } = string.Empty;
-    
-    /// <summary>
-    /// Rate limit bilgisi
-    /// </summary>
-    public string RateLimit { get; set; } = string.Empty;
-    
-    /// <summary>
-    /// İşlem zamanı
-    /// </summary>
-    public DateTime Timestamp { get; set; }
-    
-    /// <summary>
-    /// İşlem durumu
-    /// </summary>
-    public string Status { get; set; } = string.Empty;
-    
-    /// <summary>
-    /// Client IP adresi (opsiyonel)
-    /// </summary>
-    public string? ClientIP { get; set; }
-}
 
-public class SubmitDataRequest
-{
-    /// <summary>
-    /// Gönderilecek veri içeriği
-    /// </summary>
-    public string Content { get; set; } = string.Empty;
-}
 
-public class SubmitDataResponse : RateLimitResponse
-{
-    /// <summary>
-    /// Alınan veri
-    /// </summary>
-    public string ReceivedData { get; set; } = string.Empty;
-}
-
-public class RateLimitErrorResponse
-{
-    /// <summary>
-    /// Hata türü
-    /// </summary>
-    public string Error { get; set; } = string.Empty;
-    
-    /// <summary>
-    /// Hata mesajı
-    /// </summary>
-    public string Message { get; set; } = string.Empty;
-    
-    /// <summary>
-    /// HTTP status kodu
-    /// </summary>
-    public int StatusCode { get; set; }
-    
-    /// <summary>
-    /// Hata zamanı
-    /// </summary>
-    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-}
