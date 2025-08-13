@@ -1,5 +1,8 @@
 using Lego.Contexts;
+using Lego.Contexts.Enums;
+using Lego.Contexts.Models;
 using Lego.Contexts.Models.RateLimiting;
+using Lego.RateLimiting.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -17,10 +20,32 @@ public class CustomRateLimitRuleStore : IRateLimitRuleStore
         _logger = logger;
     }
 
-    // Tüm aktif rate limit kurallarını getirir
-    public async Task<IEnumerable<RateLimitRule>> GetActiveRulesAsync()
+    // Database işlemlerinde hata yakalama ve custom exception fırlatma için merkezi method
+    private async Task<T> ExecuteWithDbErrorHandlingAsync<T>(Func<Task<T>> action, string operationName)
     {
         try
+        {
+            return await action();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "{Operation} sırasında database hatası oluştu", operationName);
+            throw new RateLimitingException(
+                $"{operationName} sırasında database hatası oluştu",
+                new RateLimitingExceptionData
+                {
+                    ErrorType = RateLimitingErrorType.Database,
+                    Operation = operationName,
+                    TableName = "RateLimitRules"
+                },
+                ex);
+        }
+    }
+
+    // Tüm aktif rate limit kurallarını getirir
+    public Task<IEnumerable<RateLimitRule>> GetActiveRulesAsync()
+    {
+        return ExecuteWithDbErrorHandlingAsync(async () =>
         {
             var rules = await _context.RateLimitRules
                 .Where(r => r.IsActive)
@@ -29,19 +54,33 @@ public class CustomRateLimitRuleStore : IRateLimitRuleStore
                 .ToListAsync();
 
             _logger.LogInformation("Toplam {Count} aktif rate limit kuralı yüklendi", rules.Count);
-            return rules;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Rate limit kuralları yüklenirken hata oluştu");
-            return Enumerable.Empty<RateLimitRule>();
-        }
+            return (IEnumerable<RateLimitRule>)rules;
+        }, "Aktif kuralların alınması");
     }
 
     // Belirli bir endpoint için kuralları getirir
-    public async Task<IEnumerable<RateLimitRule>> GetRulesForEndpointAsync(string endpoint, string httpMethod)
+    public Task<IEnumerable<RateLimitRule>> GetRulesForEndpointAsync(string endpoint, string httpMethod)
     {
-        try
+        // Parameter validation
+        if (string.IsNullOrEmpty(endpoint))
+            throw new RateLimitingException("Endpoint parametresi boş olamaz", 
+                new RateLimitingExceptionData 
+                { 
+                    ErrorType = RateLimitingErrorType.Validation,
+                    FieldName = nameof(endpoint), 
+                    InvalidValue = endpoint 
+                });
+        
+        if (string.IsNullOrEmpty(httpMethod))
+            throw new RateLimitingException("HttpMethod parametresi boş olamaz", 
+                new RateLimitingExceptionData 
+                { 
+                    ErrorType = RateLimitingErrorType.Validation,
+                    FieldName = nameof(httpMethod), 
+                    InvalidValue = httpMethod 
+                });
+
+        return ExecuteWithDbErrorHandlingAsync(async () =>
         {
             var rules = await _context.RateLimitRules
                 .Where(r => r.IsActive && 
@@ -52,19 +91,24 @@ public class CustomRateLimitRuleStore : IRateLimitRuleStore
                 .ToListAsync();
 
             _logger.LogDebug("Endpoint {Endpoint} {Method} için {Count} kural bulundu", endpoint, httpMethod, rules.Count);
-            return rules;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Endpoint {Endpoint} {Method} için kurallar yüklenirken hata oluştu", endpoint, httpMethod);
-            return Enumerable.Empty<RateLimitRule>();
-        }
+            return (IEnumerable<RateLimitRule>)rules;
+        }, $"Endpoint {endpoint} {httpMethod} kurallarının alınması");
     }
 
     // Belirli bir client type için kuralları getirir
-    public async Task<IEnumerable<RateLimitRule>> GetRulesForClientTypeAsync(string clientType)
+    public Task<IEnumerable<RateLimitRule>> GetRulesForClientTypeAsync(string clientType)
     {
-        try
+        // Parameter validation
+        if (string.IsNullOrEmpty(clientType))
+            throw new RateLimitingException("ClientType parametresi boş olamaz", 
+                new RateLimitingExceptionData 
+                { 
+                    ErrorType = RateLimitingErrorType.Validation,
+                    FieldName = nameof(clientType), 
+                    InvalidValue = clientType 
+                });
+
+        return ExecuteWithDbErrorHandlingAsync(async () =>
         {
             var rules = await _context.RateLimitRules
                 .Where(r => r.IsActive && 
@@ -74,12 +118,7 @@ public class CustomRateLimitRuleStore : IRateLimitRuleStore
                 .ToListAsync();
 
             _logger.LogDebug("Client type {ClientType} için {Count} kural bulundu", clientType, rules.Count);
-            return rules;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Client type {ClientType} için kurallar yüklenirken hata oluştu", clientType);
-            return Enumerable.Empty<RateLimitRule>();
-        }
+            return (IEnumerable<RateLimitRule>)rules;
+        }, $"Client type {clientType} kurallarının alınması");
     }
 }

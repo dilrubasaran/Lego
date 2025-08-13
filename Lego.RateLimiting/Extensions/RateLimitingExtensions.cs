@@ -17,6 +17,12 @@ public static class RateLimitingExtensions
         return services;
     }
 
+    // Global error handling middleware'ini pipeline'a ekler
+    public static IApplicationBuilder UseGlobalErrorHandling(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<GlobalErrorHandlingMiddleware>();
+    }
+
     // Rate limit logging middleware'ini pipeline'a ekler
     public static IApplicationBuilder UseRateLimitLogging(this IApplicationBuilder app)
     {

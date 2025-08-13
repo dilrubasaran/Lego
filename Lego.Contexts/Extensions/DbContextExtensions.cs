@@ -8,18 +8,10 @@ namespace Lego.Contexts.Extensions
         // API veritabanını seed data ile doldurur
         public static void SeedDatabase(this ApiDbContext context)
         {
-            try
-            {
-                // Rate limiting seed data'larını yükle
-                RateLimitSeedData.SeedAll(context);
-                
-                Console.WriteLine("✅ Rate limiting seed data başarıyla yüklendi.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Seed data yüklenirken hata oluştu: {ex.Message}");
-                throw;
-            }
+            // Rate limiting seed data'larını yükle
+            RateLimitSeedData.SeedAll(context);
+            
+            Console.WriteLine("✅ Rate limiting seed data başarıyla yüklendi.");
         }
 
         // API veritabanının boş olup olmadığını kontrol eder
@@ -35,27 +27,19 @@ namespace Lego.Contexts.Extensions
         // API veritabanını sıfırlar ve yeniden seed eder
         public static void ResetAndSeedDatabase(this ApiDbContext context)
         {
-            try
-            {
-                // Tüm verileri sil
-                context.RateLimitLogs.RemoveRange(context.RateLimitLogs);
-                context.RateLimitViolations.RemoveRange(context.RateLimitViolations);
-                context.ClientWhitelists.RemoveRange(context.ClientWhitelists);
-                context.RateLimitRules.RemoveRange(context.RateLimitRules);
-                context.Languages.RemoveRange(context.Languages);
-                
-                context.SaveChanges();
+            // Tüm verileri sil
+            context.RateLimitLogs.RemoveRange(context.RateLimitLogs);
+            context.RateLimitViolations.RemoveRange(context.RateLimitViolations);
+            context.ClientWhitelists.RemoveRange(context.ClientWhitelists);
+            context.RateLimitRules.RemoveRange(context.RateLimitRules);
+            context.Languages.RemoveRange(context.Languages);
+            
+            context.SaveChanges();
 
-                // Yeniden seed et
-                context.SeedDatabase();
-                
-                Console.WriteLine("✅ Veritabanı sıfırlandı ve yeniden seed edildi.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Veritabanı sıfırlanırken hata oluştu: {ex.Message}");
-                throw;
-            }
+            // Yeniden seed et
+            context.SeedDatabase();
+            
+            Console.WriteLine("✅ Veritabanı sıfırlandı ve yeniden seed edildi.");
         }
     }
 } 

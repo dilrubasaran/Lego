@@ -9,7 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        // Model validation otomatik response'unu devre dışı bırak
+        // Custom validation exception'larımızı kullanmak için
+        options.SuppressModelStateInvalidFilter = true;
+    });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -52,6 +58,9 @@ app.UseHttpsRedirection();
 
 // CORS middleware'ini ekle
 app.UseCors("AllowAll");
+
+// 🔥 Global error handling middleware'ini ekle (İLK SIRADA - tüm hataları yakalar)
+app.UseGlobalErrorHandling();
 
 // Rate limit logging middleware'ini ekle (ÖNCE - response'u yakalamak için)
 app.UseRateLimitLogging();

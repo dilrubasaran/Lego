@@ -1,5 +1,8 @@
 using Lego.Contexts;
+using Lego.Contexts.Enums;
+using Lego.Contexts.Models;
 using Lego.Contexts.Models.RateLimiting;
+using Lego.RateLimiting.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
@@ -150,8 +153,8 @@ public class RateLimitLoggingMiddleware
     {
         try
         {
-            // ApiDbContext'i doğrudan oluştur (Scoped service problem yaratabilir)
-            var connectionString = "Data Source=LegoApi.db"; // appsettings'ten al
+            // ApiDbContext'i doğrudan oluştur
+            var connectionString = "Data Source=LegoApi.db";
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
             optionsBuilder.UseSqlite(connectionString);
             
@@ -177,7 +180,16 @@ public class RateLimitLoggingMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Rate limit log kaydı oluşturulurken hata oluştu");
+            _logger.LogError(ex, "Rate limit log kaydı oluşturulurken database hatası oluştu");
+            throw new RateLimitingException(
+                "Rate limit log kaydı oluşturulamadı", 
+                new RateLimitingExceptionData 
+                { 
+                    ErrorType = RateLimitingErrorType.Database,
+                    Operation = "INSERT", 
+                    TableName = "RateLimitLogs" 
+                }, 
+                ex);
         }
     }
 
@@ -219,7 +231,16 @@ public class RateLimitLoggingMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Rate limit ihlali kaydedilirken hata oluştu");
+            _logger.LogError(ex, "Rate limit violation kaydı oluşturulurken database hatası oluştu");
+            throw new RateLimitingException(
+                "Rate limit violation kaydı oluşturulamadı", 
+                new RateLimitingExceptionData 
+                { 
+                    ErrorType = RateLimitingErrorType.Database,
+                    Operation = "INSERT", 
+                    TableName = "RateLimitViolations" 
+                }, 
+                ex);
         }
     }
 

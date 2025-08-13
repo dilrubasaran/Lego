@@ -1,4 +1,7 @@
 using Lego.API.DTOs.RateLimiting;
+using Lego.Contexts.Enums;
+using Lego.Contexts.Models;
+using Lego.RateLimiting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 // Rate limiting test controller'ı. Farklı endpoint'ler için rate limiting kurallarını test etmek için kullanılır.
@@ -49,14 +52,26 @@ public class RateLimitingController : ControllerBase
     [ProducesResponseType(typeof(RateLimitErrorResponse), 429)]
     public ActionResult<SubmitDataResponse> SubmitData([FromBody] SubmitDataRequest data)
     {
-        if (data == null || string.IsNullOrEmpty(data.Content))
+        if (data == null)
         {
-            return BadRequest(new RateLimitErrorResponse
-            {
-                Error = "Geçersiz veri",
-                Message = "Content alanı boş olamaz",
-                StatusCode = 400
-            });
+            throw new RateLimitingException("Request body boş olamaz", 
+                new RateLimitingExceptionData 
+                { 
+                    ErrorType = RateLimitingErrorType.Validation,
+                    FieldName = nameof(data), 
+                    InvalidValue = data 
+                });
+        }
+        
+        if (string.IsNullOrEmpty(data.Content))
+        {
+            throw new RateLimitingException("Content alanı boş olamaz", 
+                new RateLimitingExceptionData 
+                { 
+                    ErrorType = RateLimitingErrorType.Validation,
+                    FieldName = nameof(data.Content), 
+                    InvalidValue = data.Content 
+                });
         }
 
         return Ok(new SubmitDataResponse
