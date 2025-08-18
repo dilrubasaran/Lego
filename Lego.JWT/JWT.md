@@ -37,13 +37,13 @@ için izlenecek versiyonlara bölünmüş yol haritasını sunar.---
 JWT tabanlı authentication mekanizmasının kurulması ve temel token üretimi.
 
 ### 🔧 Yapılacaklar
-- [ ] `Microsoft.AspNetCore.Authentication.JwtBearer` kütüphanesini projeye dahil et
-- [ ] `JwtService` sınıfını oluştur (Token üretimi için)
-- [ ] Symmetric key ile imzalama işlemi (HS256 algoritması)
+- [x] `Microsoft.AspNetCore.Authentication.JwtBearer` kütüphanesini projeye dahil et
+- [x] `JwtService` sınıfını oluştur (Token üretimi için)
+- [x] Symmetric key ile imzalama işlemi (HS256 algoritması)
 - [ ] Expire süresi ayarlama (örnek: 60 dakika)
-- [ ] Kullanıcı girişinde token üretimi (Login endpoint)
-- [ ] JWT ayarlarını `appsettings.json` üzerinden yönetilebilir yap
-- [ ] Middleware'de JWT doğrulama yapısının eklenmesi
+- [x] Kullanıcı girişinde token üretimi (Login endpoint)
+- [x] JWT ayarlarını `appsettings.json` üzerinden yönetilebilir yap
+- [x] Middleware'de JWT doğrulama yapısının eklenmesi
 - [ ] Test endpoint'i oluştur ve token ile erişimi test et
 
 ### 📁 appsettings.json Yapılandırması
