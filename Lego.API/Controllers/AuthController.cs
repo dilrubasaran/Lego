@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Lego.API.DTOs.Auth;
 using Lego.JWT.Interfaces;
 using Lego.JWT.Models;
+using Lego.Contexts.Interfaces;
 
 namespace Lego.API.Controllers;
 
@@ -15,18 +16,21 @@ public class AuthController : ControllerBase
     private readonly IClaimsService _claimsService;
     private readonly JwtOptions _jwtOptions;
     private readonly ILogger<AuthController> _logger;
+    private readonly IUserService _userService;
 
     // AuthController constructor
     public AuthController(
         IJwtService jwtService,
         IClaimsService claimsService,
         IOptions<JwtOptions> jwtOptions,
-        ILogger<AuthController> logger)
+        ILogger<AuthController> logger,
+        IUserService userService)
     {
         _jwtService = jwtService;
         _claimsService = claimsService;
         _jwtOptions = jwtOptions.Value;
         _logger = logger;
+        _userService = userService;
     }
 
     // Kullanıcı giriş işlemi
@@ -47,16 +51,22 @@ public class AuthController : ControllerBase
                 return BadRequest("Geçersiz giriş bilgileri");
             }
 
-            // Kullanıcı doğrulaması (örnek implementasyon)
-            var user = await ValidateUserAsync(request.Username, request.Password);
-            if (user == null)
+            // Veritabanından kullanıcı doğrulaması
+            var userModel = await _userService.ValidateUserAsync(request.Username, request.Password);
+            if (userModel == null)
             {
                 _logger.LogWarning("Başarısız giriş denemesi: {Username}", request.Username);
                 return Unauthorized("Geçersiz kullanıcı adı veya şifre");
             }
 
+            // Son giriş tarihini güncelle
+            await _userService.UpdateLastLoginAsync(userModel.Id);
+
+            // Kullanıcı rollerini al
+            var userRoles = _userService.GetUserRoles(userModel);
+
             // Claims oluşturma
-            var claims = _claimsService.GetClaims(user.Id, user.Username, user.Email, user.Roles);
+            var claims = _claimsService.GetClaims(userModel.Id.ToString(), userModel.Username, userModel.Email, userRoles);
 
             // JWT token üretme
             var token = _jwtService.GenerateToken(claims);
@@ -70,7 +80,13 @@ public class AuthController : ControllerBase
                 Token = token,
                 ExpiresInMinutes = _jwtOptions.ExpirationMinutes,
                 TokenType = "Bearer",
-                User = user
+                User = new UserInfo
+                {
+                    Id = userModel.Id.ToString(),
+                    Username = userModel.Username,
+                    Email = userModel.Email,
+                    Roles = userRoles
+                }
             };
 
             return Ok(response);
@@ -91,51 +107,18 @@ public class AuthController : ControllerBase
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         var username = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+        
+        // Debug için tüm claim'leri göster
+        var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
 
         return Ok(new
         {
             IsValid = true,
             UserId = userId,
             Username = username,
+            AllClaims = allClaims, // Debug için eklendi
             Message = "Token geçerli"
         });
     }
 
-    // Kullanıcı doğrulama işlemi (örnek implementasyon)
-    // Gerçek uygulamada bu metod veritabanından kullanıcı bilgilerini çeker
-    private async Task<UserInfo?> ValidateUserAsync(string username, string password)
-    {
-        // Bu örnek implementasyondur - gerçek uygulamada:
-        // 1. Veritabanından kullanıcı bulunur
-        // 2. Şifre hash'i doğrulanır  
-        // 3. Kullanıcı rolleri çekilir
-        // 4. Hesap durumu kontrol edilir (aktif/pasif, kilitli vs.)
-
-        await Task.Delay(100); // Veritabanı çağrısını simüle et
-
-        // Demo kullanıcı
-        if (username == "admin" && password == "123456")
-        {
-            return new UserInfo
-            {
-                Id = "1",
-                Username = "admin",
-                Email = "admin@example.com",
-                Roles = new List<string> { "Admin", "User" }
-            };
-        }
-
-        if (username == "user" && password == "123456")
-        {
-            return new UserInfo
-            {
-                Id = "2",
-                Username = "user",
-                Email = "user@example.com",
-                Roles = new List<string> { "User" }
-            };
-        }
-
-        return null;
-    }
 }

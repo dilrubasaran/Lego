@@ -40,11 +40,11 @@ JWT tabanlı authentication mekanizmasının kurulması ve temel token üretimi.
 - [x] `Microsoft.AspNetCore.Authentication.JwtBearer` kütüphanesini projeye dahil et
 - [x] `JwtService` sınıfını oluştur (Token üretimi için)
 - [x] Symmetric key ile imzalama işlemi (HS256 algoritması)
-- [ ] Expire süresi ayarlama (örnek: 60 dakika)
+- [x] Expire süresi ayarlama (örnek: 60 dakika)
 - [x] Kullanıcı girişinde token üretimi (Login endpoint)
 - [x] JWT ayarlarını `appsettings.json` üzerinden yönetilebilir yap
 - [x] Middleware'de JWT doğrulama yapısının eklenmesi
-- [ ] Test endpoint'i oluştur ve token ile erişimi test et
+- [x] Test endpoint'i oluştur ve token ile erişimi test et
 
 ### 📁 appsettings.json Yapılandırması
 ```json
@@ -80,10 +80,10 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 ```
 
 ### 🔍 Test Edilecek Senaryolar
-- [ ] Geçerli token ile korumalı endpoint'e erişim ✅
-- [ ] Geçersiz token → 401 ❌
-- [ ] Süresi dolmuş token → 401 ❌
-- [ ] Token'sız istek → 401 ❌
+- [x] Geçerli token ile korumalı endpoint'e erişim ✅
+- [x] Geçersiz token → 401 ❌
+- [x] Süresi dolmuş token → 401 ❌
+- [x] Token'sız istek → 401 ❌
 
 ---
 
@@ -93,7 +93,7 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 Kullanıcının claim'lerine göre endpoint erişim kontrolü yapılması.
 
 ### 🔧 Yapılacaklar
-- [ ] `Claims` tabanlı yapı kur
+- [x] `Claims` tabanlı yapı kur
 - [ ] `Policy` tanımlamaları (`services.AddAuthorization`)
 - [ ] `[Authorize(Policy = "...")]` kullanımı
 - [ ] Custom claim'lerle erişim kontrolü (örnek: Department, Permission)
@@ -279,9 +279,9 @@ public async Task ProtectedEndpoint_WithValidToken_ShouldReturn200()
 ## 📋 Versiyon Geçiş Kontrol Listesi
 
 ### v1 → v2 Geçişi
-- [ ] Temel JWT çalışıyor mu?
-- [ ] Token üretimi ve doğrulama test edildi mi?
-- [ ] Middleware yapılandırması tamamlandı mı?
+- [x] Temel JWT çalışıyor mu?
+- [x] Token üretimi ve doğrulama test edildi mi?
+- [x] Middleware yapılandırması tamamlandı mı?
 
 ### v2 → v3 Geçişi
 - [ ] Policy'ler tanımlandı mı?

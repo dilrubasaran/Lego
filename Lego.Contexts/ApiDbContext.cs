@@ -12,6 +12,9 @@ public class ApiDbContext : DbContext
     // Language tablosu (opsiyonel - API'de localization kullanılırsa)
     public DbSet<Language> Languages { get; set; }
 
+    // User tablosu - Authentication için
+    public DbSet<UserModel> Users { get; set; }
+
     // Rate Limiting tabloları
     public DbSet<RateLimitRule> RateLimitRules { get; set; }
     public DbSet<RateLimitViolation> RateLimitViolations { get; set; }

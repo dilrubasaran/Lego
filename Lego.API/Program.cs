@@ -4,6 +4,10 @@ using Lego.RateLimiting.Stores;
 using Lego.RateLimiting.Extensions;
 using Lego.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Lego.JWT.Extensions;
+using Lego.Contexts.Interfaces;
+using Lego.Contexts.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +51,13 @@ builder.Services.AddInMemoryRateLimiting();
 // Lego Rate Limiting servisleri
 builder.Services.AddLegoRateLimiting();
 
+// JWT servisleri
+builder.Services.AddJwtCore(builder.Configuration);
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
+// User servisleri
+builder.Services.AddScoped<IUserService, UserService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -68,6 +79,8 @@ app.UseRateLimitLogging();
 // Rate limiting middleware'ini ekle (SONRA - gerçek rate limiting)
 app.UseIpRateLimiting();
 
+// JWT Authentication ve Authorization middleware'lerini ekle
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -77,6 +90,13 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
     
+    //// User seed data
+    if (!context.Users.Any())
+    {
+       context.Users.AddRange(Lego.Contexts.Seed.UserSeedData.GetUsers());
+       context.SaveChanges();
+    }
+
     // Rate limiting seed data
     if (!context.RateLimitRules.Any())
     {

@@ -18,6 +18,15 @@ Content-Type: application/json
   "password": "123456"
 }
 
+### 2.5. Login - Manager User  
+POST https://localhost:7087/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "manager",
+  "password": "123456"
+}
+
 ### 3. Login - Invalid Credentials
 POST https://localhost:7087/api/auth/login
 Content-Type: application/json
@@ -29,11 +38,11 @@ Content-Type: application/json
 
 ### 4. Validate Token (Replace {token} with actual token from login response)
 GET https://localhost:7087/api/auth/validate
-Authorization: Bearer {token}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AbGVnby5jb20iLCJyb2xlIjpbIkFkbWluIiwiVXNlciJdLCJqdGkiOiIzMTJhODYzZC00N2ZlLTRlOTktYjI4Yy02ZTQ4NWExNDgwODgiLCJpYXQiOjE3NTU1MjEwMTksImRlcGFydG1lbnRfaWQiOiJkZWZhdWx0IiwicGVybWlzc2lvbl9sZXZlbCI6InN0YW5kYXJkIiwibmJmIjoxNzU1NTIxMDE5LCJleHAiOjE3NTU1MjQ2MTksImlzcyI6IkxlZ29BUEkiLCJhdWQiOiJMZWdvVXNlcnMifQ.cGbid_1B9yTtAPkItuQ3InefOkVCwBC3OdkvMhicXhw
 
 ### 5. Test Protected Endpoint (Existing Rate Limiting Controller)
 GET https://localhost:7087/api/RateLimiting/private
-Authorization: Bearer {token}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AbGVnby5jb20iLCJyb2xlIjpbIkFkbWluIiwiVXNlciJdLCJqdGkiOiIzMTJhODYzZC00N2ZlLTRlOTktYjI4Yy02ZTQ4NWExNDgwODgiLCJpYXQiOjE3NTU1MjEwMTksImRlcGFydG1lbnRfaWQiOiJkZWZhdWx0IiwicGVybWlzc2lvbl9sZXZlbCI6InN0YW5kYXJkIiwibmJmIjoxNzU1NTIxMDE5LCJleHAiOjE3NTU1MjQ2MTksImlzcyI6IkxlZ29BUEkiLCJhdWQiOiJMZWdvVXNlcnMifQ.cGbid_1B9yTtAPkItuQ3InefOkVCwBC3OdkvMhicXhw
 
 ### 6. Test Without Token (Should fail)
 GET https://localhost:7087/api/auth/validate
