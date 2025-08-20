@@ -50,7 +50,7 @@ public class JwtAuthenticationMiddleware
     }
 
     // JWT token'ı doğrular ve kullanıcı kimliğini context'e ekler
-    private async Task ValidateTokenAsync(HttpContext context, string token)
+    private async  Task ValidateTokenAsync(HttpContext context, string token)
     {
         try
         {

@@ -14,6 +14,9 @@ public class LoginResponse
 
     // Kullanıcı bilgileri
     public UserInfo User { get; set; } = new();
+
+    // Refresh token (rotation öncesi ilk üretim)
+    public string RefreshToken { get; set; } = string.Empty;
 }
 
 // Kullanıcı bilgi modeli

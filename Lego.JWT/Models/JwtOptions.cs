@@ -16,5 +16,8 @@ public class JwtOptions
     public string SecretKey { get; set; } = string.Empty;
 
     // Token'ın kaç dakika geçerli olacağını belirten değer
-    public int ExpirationMinutes { get; set; } = 60;
+    public int ExpirationMinutes { get; set; } = 15;
+
+    // Refresh token'ın kaç gün geçerli olacağını belirleyen değer
+    public int RefreshTokenDays { get; set; } = 7;
 }

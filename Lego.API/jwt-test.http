@@ -40,13 +40,16 @@ Content-Type: application/json
 GET https://localhost:7087/api/auth/validate
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AbGVnby5jb20iLCJyb2xlIjpbIkFkbWluIiwiVXNlciJdLCJqdGkiOiIzMTJhODYzZC00N2ZlLTRlOTktYjI4Yy02ZTQ4NWExNDgwODgiLCJpYXQiOjE3NTU1MjEwMTksImRlcGFydG1lbnRfaWQiOiJkZWZhdWx0IiwicGVybWlzc2lvbl9sZXZlbCI6InN0YW5kYXJkIiwibmJmIjoxNzU1NTIxMDE5LCJleHAiOjE3NTU1MjQ2MTksImlzcyI6IkxlZ29BUEkiLCJhdWQiOiJMZWdvVXNlcnMifQ.cGbid_1B9yTtAPkItuQ3InefOkVCwBC3OdkvMhicXhw
 
-### 5. Test Protected Endpoint (Existing Rate Limiting Controller)
+### 5. Korumalı Endpoint Testi (Rate Limiting Controller)
 GET https://localhost:7087/api/RateLimiting/private
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AbGVnby5jb20iLCJyb2xlIjpbIkFkbWluIiwiVXNlciJdLCJqdGkiOiIzMTJhODYzZC00N2ZlLTRlOTktYjI4Yy02ZTQ4NWExNDgwODgiLCJpYXQiOjE3NTU1MjEwMTksImRlcGFydG1lbnRfaWQiOiJkZWZhdWx0IiwicGVybWlzc2lvbl9sZXZlbCI6InN0YW5kYXJkIiwibmJmIjoxNzU1NTIxMDE5LCJleHAiOjE3NTU1MjQ2MTksImlzcyI6IkxlZ29BUEkiLCJhdWQiOiJMZWdvVXNlcnMifQ.cGbid_1B9yTtAPkItuQ3InefOkVCwBC3OdkvMhicXhw
 
-### 6. Test Without Token (Should fail)
-GET https://localhost:7087/api/auth/validate
+### 6. Refresh Token Testi (geçerli refresh token ile yenileme)
+POST https://localhost:7087/api/auth/refresh-token
+Content-Type: application/json
 
-### Example with real token (replace with actual token):
-# GET https://localhost:7087/api/auth/validate
-# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+{
+  "refreshToken": "xDZfnFwpQwKV8p7Bs98TWgqe++tLvNlgL1j8cY5TwbhbWky9qs3X1DwCKGl5n9UFD/7AF1v9irwHNJg3rIV4Vg=="
+}
+
+

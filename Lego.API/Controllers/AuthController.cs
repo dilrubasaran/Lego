@@ -4,6 +4,8 @@ using Lego.API.DTOs.Auth;
 using Lego.JWT.Interfaces;
 using Lego.JWT.Models;
 using Lego.Contexts.Interfaces;
+using Lego.Contexts.Models.Auth;
+
 
 namespace Lego.API.Controllers;
 
@@ -17,6 +19,7 @@ public class AuthController : ControllerBase
     private readonly JwtOptions _jwtOptions;
     private readonly ILogger<AuthController> _logger;
     private readonly IUserService _userService;
+    private readonly IRefreshTokenService _refreshTokenService;
 
     // AuthController constructor
     public AuthController(
@@ -24,13 +27,15 @@ public class AuthController : ControllerBase
         IClaimsService claimsService,
         IOptions<JwtOptions> jwtOptions,
         ILogger<AuthController> logger,
-        IUserService userService)
+        IUserService userService,
+       IRefreshTokenService refreshTokenService)
     {
         _jwtService = jwtService;
         _claimsService = claimsService;
         _jwtOptions = jwtOptions.Value;
         _logger = logger;
         _userService = userService;
+        _refreshTokenService = refreshTokenService;
     }
 
     // Kullanıcı giriş işlemi
@@ -68,8 +73,12 @@ public class AuthController : ControllerBase
             // Claims oluşturma
             var claims = _claimsService.GetClaims(userModel.Id.ToString(), userModel.Username, userModel.Email, userRoles);
 
-            // JWT token üretme
+            // JWT access token üretme
             var token = _jwtService.GenerateToken(claims);
+
+            // Refresh token üretme ve kaydetme (konfigürasyondan süre)
+            var refreshTokenLifetime = TimeSpan.FromMinutes(_jwtOptions.RefreshTokenMinutes);
+            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(userModel.Id, refreshTokenLifetime);
 
             // Başarılı giriş loglama
             _logger.LogInformation("Başarılı kullanıcı girişi: {Username}", request.Username);
@@ -86,7 +95,8 @@ public class AuthController : ControllerBase
                     Username = userModel.Username,
                     Email = userModel.Email,
                     Roles = userRoles
-                }
+                },
+                RefreshToken = refreshToken.Token
             };
 
             return Ok(response);
@@ -96,6 +106,46 @@ public class AuthController : ControllerBase
             _logger.LogError(ex, "Giriş işlemi sırasında hata oluştu: {Username}", request.Username);
             return StatusCode(500, "Sunucu hatası oluştu");
         }
+    }
+
+    // Refresh token ile yeni access token üretir ve eski refresh token'ı invalid eder (rotation)
+    [HttpPost("refresh-token")]
+    [ProducesResponseType(typeof(RefreshTokenResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.RefreshToken))
+        {
+            return BadRequest("Refresh token gerekli");
+        }
+
+        var existing = await _refreshTokenService.ValidateRefreshTokenAsync(request.RefreshToken);
+        if (existing == null)
+        {
+            return Unauthorized("Geçersiz veya süresi dolmuş refresh token");
+        }
+
+        var user = await _userService.GetUserByIdAsync(existing.UserId);
+        if (user == null || !user.IsActive)
+        {
+            return Unauthorized("Kullanıcı bulunamadı veya pasif");
+        }
+
+        var roles = _userService.GetUserRoles(user);
+        var claims = _claimsService.GetClaims(user.Id.ToString(), user.Username, user.Email, roles);
+        var accessToken = _jwtService.GenerateToken(claims);
+
+        // Rotation: eski refresh token'ı iptal et ve yenisini üret
+        var newRefresh = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, TimeSpan.FromMinutes(_jwtOptions.RefreshTokenMinutes));
+        await _refreshTokenService.RevokeRefreshTokenAsync(new RefreshToken { Id = existing.Id }, replacedByToken: newRefresh.Token);
+
+        return Ok(new RefreshTokenResponse
+        {
+            AccessToken = accessToken,
+            ExpiresInMinutes = _jwtOptions.ExpirationMinutes,
+            RefreshToken = newRefresh.Token
+        });
     }
 
     // Token geçerliliğini kontrol eden endpoint

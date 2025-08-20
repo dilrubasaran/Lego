@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using Lego.Contexts.Models.Auth;
 
 namespace Lego.Contexts.Models;
 
@@ -50,4 +52,7 @@ public class UserModel
 
     // Tam ad property'si
     public string FullName => $"{FirstName} {LastName}".Trim();
+
+    // Kullanıcının sahip olduğu refresh token'lar (1 - n ilişki)
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

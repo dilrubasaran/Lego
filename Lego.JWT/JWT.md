@@ -1,7 +1,7 @@
 # 🔐 JWT Authentication & Authorization Roadmap
 
 Bu doküman, ASP.NET Core projesinde JWT (JSON Web Token) mimarisini adım adım oluşturmak 
-için izlenecek versiyonlara bölünmüş yol haritasını sunar.---
+için izlenecek versiyonlara bölünmüş yol haritasını sunar.
 
 ## ✅ MVP
 **Sektörde yaygın, hızlı uygulanabilir, öğrenme aşaması için ideal, çoklu kullanım alanı**
@@ -15,19 +15,17 @@ için izlenecek versiyonlara bölünmüş yol haritasını sunar.---
 ## 🔄 Intermediate 
 **MVP'den sonra ihtiyaç duyulabilecek, biraz daha karmaşık, entegrasyon gerektiren**
 
-- **Claim/Policy yetkilendirme**: Policy bazlı erişim kontrolü
-- **Refresh token (temel)**: Yenileme mekanizması
-- **Role-based authorization**: `[Authorize(Roles = "Admin")]` kullanımı
-- **JWT bazlı rate limiting (basit)**: Kullanıcı/rol bazlı temel limitler
+- **Refresh token mekanizması**: Token yenileme ve güvenlik
+- **Token security (blacklist/revocation)**: Güvenlik katmanı
+- **Claim/Policy yetkilendirme**: Policy bazlı erişim kontrolü (Daha sonra)
+- **Role-based authorization**: `[Authorize(Roles = "Admin")]` kullanımı (Daha sonra)
 
 ## 🚀 Advanced
 **İleri seviye, karmaşık, performans, güvenlik veya özel senaryolar için**
 
-- **Karma policy/role yapıları**: Çok seviyeli, çapraz erişim senaryoları
+- **Karma policy/role yapıları**: Çok seviyeli, çapraz erişim senaryoları (daha sonra)
 - **Refresh token revocation**: İptal ve blacklist mekanizmaları
-- **JWT bazlı rate limiting (gelişmiş)**: Token içeriğine göre dinamik limitler
-- **Güvenlik sertleştirme**: Clock skew, audience/issuer sıkı doğrulama, secret rotation
-- **Token monitoring & audit**: Giriş/erişim logları, anomali tespiti, suspicious activity tracking
+- **Karma policy/role yapıları**: Çok seviyeli, çapraz erişim senaryoları (Daha sonra)
 
 ---
 
@@ -87,7 +85,78 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 ---
 
-## 🚧 v2 – Claim/Policy Yetkilendirme [Intermediate]
+## 🔁 v2 – Refresh Token Mekanizması [Intermediate]
+
+### 🎯 Amaç
+Access token süresi dolduğunda kullanıcıdan tekrar login istenmeden token yenilenmesi.
+
+### 🔧 Yapılacaklar
+- [x] Refresh token üretimi ve veritabanında saklanması
+- [x] Token yenileme endpoint'i (RefreshToken)
+- [x] Token süresi kontrolü ve yeni access/refresh token üretimi
+- [x] Refresh token süresi ve güvenliği (tek kullanımlık/rotation)
+- [ ] Sliding expiration stratejisi (kullanıcı aktifse refresh süresi uzasın)
+- [x] Token rotation (her seferinde refresh token değişsin)
+
+### 📊 Veritabanı Modeli
+```csharp
+public class RefreshToken
+{
+    public int Id { get; set; }
+    public string Token { get; set; } = string.Empty;
+    public int UserId { get; set; }
+    public DateTime CreatedAtUtc { get; set; }
+    public DateTime ExpiresAtUtc { get; set; }
+    public DateTime? RevokedAtUtc { get; set; }
+    public string? ReplacedByToken { get; set; }
+}
+```
+
+### 🔍 Test Edilecek Senaryolar
+- [x] Access token expire olduğunda refresh token ile yeni token alma ✅
+- [x] Geçersiz refresh token → 401 ❌
+- [x] Süresi dolmuş refresh token → 401 ❌
+- [ ] Sliding expiration testi (aktif kullanıcı süresi uzatılıyor mu?)
+- [x] Token rotation testi (refresh token değişiyor mu?)
+
+
+
+---
+
+## 🛡️ v3 – Token Security (Blacklist/Revocation) [Intermediate]
+
+### 🎯 Amaç
+Refresh token'ların güvenli bir şekilde iptal edilmesi ve blacklist mekanizması.
+
+### 🔧 Yapılacaklar
+- [ ] Logout endpoint'i (refresh token'ı blacklist'e al)
+- [ ] Şifre resetlendiğinde tüm refresh token'ları invalid et
+- [ ] Middleware ile blacklist kontrolü
+- [ ] Stolen token senaryosu için revocation mekanizması
+- [ ] Token monitoring ve audit logları
+
+### 📊 Blacklist Modeli
+```csharp
+public class TokenBlacklist
+{
+    public int Id { get; set; }
+    public string Token { get; set; }
+    public string UserId { get; set; }
+    public DateTime RevokedAt { get; set; }
+    public string Reason { get; set; } // "Logout", "PasswordReset", "Stolen"
+    public DateTime ExpiryDate { get; set; }
+}
+```
+
+### 🔍 Test Edilecek Senaryolar
+- [ ] Logout sonrası refresh token ile yeni token alamama ✅
+- [ ] Şifre reset sonrası tüm token'ların invalid olması ✅
+- [ ] Blacklist'teki token ile erişim denemesi → 401 ❌
+- [ ] Stolen token senaryosu (admin tarafından manuel revocation)
+
+---
+
+## 🚧 v4 – Claim/Policy Yetkilendirme [Intermediate] - Daha Sonra
 
 ### 🎯 Amaç
 Kullanıcının claim'lerine göre endpoint erişim kontrolü yapılması.
@@ -126,40 +195,7 @@ services.AddAuthorization(options =>
 
 ---
 
-## 🔁 v3 – Refresh Token Mekanizması [Intermediate]
-
-### 🎯 Amaç
-Access token süresi dolduğunda kullanıcıdan tekrar login istenmeden token yenilenmesi.
-
-### 🔧 Yapılacaklar
-- [ ] Refresh token üretimi ve veritabanında saklanması
-- [ ] Token yenileme endpoint'i (RefreshToken)
-- [ ] Token süresi kontrolü ve yeni access/refresh token üretimi
-- [ ] Refresh token süresi ve güvenliği (örnek: tek kullanımlık token)
-- [ ] Refresh token iptali ve revocation senaryoları
-
-### 📊 Veritabanı Modeli
-```csharp
-public class RefreshToken
-{
-    public int Id { get; set; }
-    public string Token { get; set; }
-    public string UserId { get; set; }
-    public DateTime ExpiryDate { get; set; }
-    public bool IsRevoked { get; set; }
-    public DateTime CreatedAt { get; set; }
-}
-```
-
-### 🔍 Test Edilecek Senaryolar
-- [ ] Access token expire olduğunda refresh token ile yeni token alma ✅
-- [ ] Geçersiz refresh token → 401 ❌
-- [ ] Süresi dolmuş refresh token → 401 ❌
-- [ ] Revoke edilmiş refresh token → 401 ❌
-
----
-
-## 🧠 v4 – Karma Policy/Role Yapıları [Advanced]
+## 🧠 v5 – Karma Policy/Role Yapıları [Advanced] - Daha Sonra
 
 ### 🎯 Amaç
 Policy + Role tabanlı esnek bir erişim kontrol sistemi kurmak.
@@ -195,7 +231,7 @@ options.AddPolicy("SeniorInDepartment", policy =>
 
 ---
 
-## 🚦 v5 – JWT Bazlı Rate Limiting Entegrasyonu [Advanced]
+## 🚦 v6 – JWT Bazlı Rate Limiting Entegrasyonu [Advanced] - Daha Sonra
 
 ### 🎯 Amaç
 JWT token içeriğine göre kullanıcıya özel rate limit uygulamak.
@@ -284,21 +320,28 @@ public async Task ProtectedEndpoint_WithValidToken_ShouldReturn200()
 - [x] Middleware yapılandırması tamamlandı mı?
 
 ### v2 → v3 Geçişi
+- [x] Refresh token mekanizması çalışıyor mu?
+- [x] Token yenileme endpoint'i test edildi mi?
+- [ ] Sliding expiration çalışıyor mu?
+- [x] Token rotation test edildi mi?
+
+### v3 → v4 Geçişi
+- [ ] Blacklist mekanizması çalışıyor mu?
+- [ ] Logout endpoint'i test edildi mi?
+- [ ] Revocation mekanizması kuruldu mu?
+- [ ] Stolen token senaryosu test edildi mi?
+
+### v4 → v5 Geçişi (Daha Sonra)
 - [ ] Policy'ler tanımlandı mı?
 - [ ] Claim bazlı yetkilendirme test edildi mi?
 - [ ] Custom policy'ler çalışıyor mu?
 
-### v3 → v4 Geçişi
-- [ ] Refresh token mekanizması çalışıyor mu?
-- [ ] Token yenileme endpoint'i test edildi mi?
-- [ ] Revocation mekanizması kuruldu mu?
-
-### v4 → v5 Geçişi
+### v5 → v6 Geçişi (Daha Sonra)
 - [ ] Role + Policy kombinasyonları çalışıyor mu?
 - [ ] Karma yetkilendirme test edildi mi?
 - [ ] Dinamik policy registration kuruldu mu?
 
-### v5 Tamamlandığında
+### v6 Tamamlandığında (Daha Sonra)
 - [ ] JWT bazlı rate limiting çalışıyor mu?
 - [ ] Token'a göre farklı limitler uygulanıyor mu?
 - [ ] Tüm test senaryoları geçiyor mu?
@@ -313,7 +356,7 @@ public async Task ProtectedEndpoint_WithValidToken_ShouldReturn200()
 - [ ] Refresh token güvenli saklanıyor mu?
 - [ ] Token revocation mekanizması var mı?
 
-### Rate Limiting Güvenliği
+### Rate Limiting Güvenliği (Daha Sonra)
 - [ ] Token'sız istekler için fallback limit var mı?
 - [ ] Rate limit bypass edilebiliyor mu?
 - [ ] Token spoofing'e karşı koruma var mı?

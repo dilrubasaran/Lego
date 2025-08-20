@@ -21,6 +21,7 @@ public static class JwtServiceCollectionExtensions
         // JWT servislerini kaydet
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IClaimsService, ClaimsService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
         return services;
     }

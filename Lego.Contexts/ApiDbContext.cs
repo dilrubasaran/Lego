@@ -1,6 +1,7 @@
 using Lego.Contexts.Models;
 using Microsoft.EntityFrameworkCore;
 using Lego.Contexts.Models.RateLimiting;
+using Lego.Contexts.Models.Auth;
 
 namespace Lego.Contexts;
 
@@ -14,6 +15,7 @@ public class ApiDbContext : DbContext
 
     // User tablosu - Authentication için
     public DbSet<UserModel> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     // Rate Limiting tabloları
     public DbSet<RateLimitRule> RateLimitRules { get; set; }
@@ -44,6 +46,17 @@ public class ApiDbContext : DbContext
                 IsActive = true
             }
         );
+
+        // RefreshToken indeksleri
+        modelBuilder.Entity<RefreshToken>()
+            .HasIndex(r => r.Token)
+            .IsUnique();
+
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne(r => r.User)
+            .WithMany(u => u.RefreshTokens)
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
     }
 }
