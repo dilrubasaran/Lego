@@ -16,15 +16,13 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    // Ana sayfa
-    // Returns: Ana sayfa view'ı
+
     public IActionResult Index()
     {
         return View();
     }
 
     // Localization test sayfası
-    // Returns: Localization test view'ı
     public IActionResult LocalizationTest()
     {
         return View();
@@ -39,8 +37,6 @@ public class HomeController : Controller
         return RedirectToAction("LocalizationTest");
     }
 
-    // Hata sayfası
-    // Returns: Hata view'ı
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

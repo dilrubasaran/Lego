@@ -5,18 +5,14 @@ namespace Lego.Localization.Interfaces;
 
 public interface ILocalizationService
 {
-    /// Belirtilen key ve resource type'a göre yerelleştirilmiş metni döndürür
-    /// <param name="key">Kaynak anahtarı</param>
-    /// <param name="type">Kaynak türü (Header, Footer, SharedResource)</param>
-    /// <returns>Yerelleştirilmiş metin</returns>
+    // Belirtilen key ve resource type'a göre yerelleştirilmiş metni döndürür
     string Get(string key, ResourceType type);
+    
     // Mevcut culture bilgisini döndürür
-    // <returns>Culture kodu (örn: "tr-TR", "en-US")</returns>
+    // Returns: Culture kodu (örn: "tr-TR", "en-US")
     string GetCurrentCulture();
     
-    /// <summary>
-    /// Mevcut UI culture bilgisini döndürür
-    /// </summary>
-    /// <returns>UI Culture kodu</returns>
+    // Mevcut UI culture bilgisini döndürürs
+    // Returns: UI Culture kodu
     string GetCurrentUICulture();
 }
