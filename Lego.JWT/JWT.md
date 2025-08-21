@@ -47,12 +47,14 @@ JWT tabanlı authentication mekanizmasının kurulması ve temel token üretimi.
 ### 📁 appsettings.json Yapılandırması
 ```json
 {
-  "JwtSettings": {
-    "Issuer": "LegoApp",
-    "Audience": "LegoAppUsers",
-    "SecretKey": "super-secret-key-change-this-in-production",
-    "ExpiryMinutes": 60,
-    "RefreshTokenExpiryDays": 7
+  "Jwt": {
+    "Issuer": "LegoAPI",
+    "Audience": "LegoUsers",
+    "SecretKey": "super_secret_key_lego_jwt_authentication_2024_very_long_and_secure",
+    "ExpirationMinutes": 15,
+    "RefreshTokenDays": 7,
+    "SlidingExtensionDays": 1,
+    "AbsoluteRefreshTokenDays": 30
   }
 }
 ```
@@ -95,32 +97,18 @@ Access token süresi dolduğunda kullanıcıdan tekrar login istenmeden token ye
 - [x] Token yenileme endpoint'i (RefreshToken)
 - [x] Token süresi kontrolü ve yeni access/refresh token üretimi
 - [x] Refresh token süresi ve güvenliği (tek kullanımlık/rotation)
-- [ ] Sliding expiration stratejisi (kullanıcı aktifse refresh süresi uzasın)
+- [x] Sliding expiration stratejisi (kullanıcı aktifse refresh süresi uzasın)
+- [x] Absolute expiration stratejisi (maksimum süre sonunda zorunlu yeniden giriş)
 - [x] Token rotation (her seferinde refresh token değişsin)
 
-### 📊 Veritabanı Modeli
-```csharp
-public class RefreshToken
-{
-    public int Id { get; set; }
-    public string Token { get; set; } = string.Empty;
-    public int UserId { get; set; }
-    public DateTime CreatedAtUtc { get; set; }
-    public DateTime ExpiresAtUtc { get; set; }
-    public DateTime? RevokedAtUtc { get; set; }
-    public string? ReplacedByToken { get; set; }
-}
-```
 
 ### 🔍 Test Edilecek Senaryolar
 - [x] Access token expire olduğunda refresh token ile yeni token alma ✅
 - [x] Geçersiz refresh token → 401 ❌
 - [x] Süresi dolmuş refresh token → 401 ❌
-- [ ] Sliding expiration testi (aktif kullanıcı süresi uzatılıyor mu?)
-- [x] Token rotation testi (refresh token değişiyor mu?)
-
-
-
+- [x] Sliding expiration testi (aktif kullanıcı süresi uzatılıyor mu?) ✅
+- [x] Absolute expiration testi (30 gün sonra zorunlu yeniden giriş) ✅
+- [x] Token rotation testi (refresh token değişiyor mu?) ✅
 ---
 
 ## 🛡️ v3 – Token Security (Blacklist/Revocation) [Intermediate]
@@ -231,7 +219,7 @@ options.AddPolicy("SeniorInDepartment", policy =>
 
 ---
 
-## 🚦 v6 – JWT Bazlı Rate Limiting Entegrasyonu [Advanced] - Daha Sonra
+## 🚦 v6 – JWT Bazlı Rate Limiting Entegrasyonu [Advanced] 
 
 ### 🎯 Amaç
 JWT token içeriğine göre kullanıcıya özel rate limit uygulamak.

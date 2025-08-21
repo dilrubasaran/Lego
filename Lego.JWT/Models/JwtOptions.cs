@@ -16,8 +16,13 @@ public class JwtOptions
     public string SecretKey { get; set; } = string.Empty;
 
     // Token'ın kaç dakika geçerli olacağını belirten değer
-    public int ExpirationMinutes { get; set; } = 15;
-
+    public int ExpirationMinutes { get; set; }
     // Refresh token'ın kaç gün geçerli olacağını belirleyen değer
-    public int RefreshTokenDays { get; set; } = 7;
+    public int RefreshTokenDays { get; set; }
+
+    // Sliding expiration için uzatma eşiği (gün)
+    public int SlidingExtensionDays { get; set; }
+
+    // Absolute expiration için maksimum süre (gün)
+    public int AbsoluteRefreshTokenDays { get; set; }
 }

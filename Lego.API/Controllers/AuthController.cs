@@ -76,8 +76,8 @@ public class AuthController : ControllerBase
             // JWT access token üretme
             var token = _jwtService.GenerateToken(claims);
 
-            // Refresh token üretme ve kaydetme (konfigürasyondan süre)
-            var refreshTokenLifetime = TimeSpan.FromMinutes(_jwtOptions.RefreshTokenMinutes);
+            // Refresh token üretme ve kaydetme (konfigürasyondan gün cinsinden süre)
+            var refreshTokenLifetime = TimeSpan.FromDays(_jwtOptions.RefreshTokenDays);
             var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(userModel.Id, refreshTokenLifetime);
 
             // Başarılı giriş loglama
@@ -108,7 +108,7 @@ public class AuthController : ControllerBase
         }
     }
 
-    // Refresh token ile yeni access token üretir ve eski refresh token'ı invalid eder (rotation)
+    // Refresh token ile yeni access token üretir ve sliding/absolute expiration uygular
     [HttpPost("refresh-token")]
     [ProducesResponseType(typeof(RefreshTokenResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -136,15 +136,39 @@ public class AuthController : ControllerBase
         var claims = _claimsService.GetClaims(user.Id.ToString(), user.Username, user.Email, roles);
         var accessToken = _jwtService.GenerateToken(claims);
 
-        // Rotation: eski refresh token'ı iptal et ve yenisini üret
-        var newRefresh = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, TimeSpan.FromMinutes(_jwtOptions.RefreshTokenMinutes));
-        await _refreshTokenService.RevokeRefreshTokenAsync(new RefreshToken { Id = existing.Id }, replacedByToken: newRefresh.Token);
+        // Absolute expiration kontrolü (ör: 30 gün sonra zorunlu login)
+        var absoluteLimitDays = _jwtOptions.AbsoluteRefreshTokenDays;
+        var ageDays = (DateTime.UtcNow - existing.CreatedAtUtc).TotalDays;
+        if (absoluteLimitDays > 0 && ageDays >= absoluteLimitDays)
+        {
+            // Eski token'ı iptal et ve yeniden giriş iste
+            await _refreshTokenService.RevokeRefreshTokenAsync(new RefreshToken { Id = existing.Id }, replacedByToken: null);
+            return Unauthorized("Refresh token mutlak süresi doldu, lütfen yeniden giriş yapın");
+        }
+
+        // Sliding expiration kontrolü: kalan süre eşikten azsa rotate et, değilse mevcut kalsın
+        var remaining = existing.ExpiresAtUtc - DateTime.UtcNow;
+        var slidingThreshold = TimeSpan.FromDays(_jwtOptions.SlidingExtensionDays);
+
+        string resultingRefreshToken;
+        if (remaining <= slidingThreshold)
+        {
+            // Rotation: eski refresh token'ı iptal et ve yenisini üret
+            var newRefresh = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, TimeSpan.FromDays(_jwtOptions.RefreshTokenDays));
+            await _refreshTokenService.RevokeRefreshTokenAsync(new RefreshToken { Id = existing.Id }, replacedByToken: newRefresh.Token);
+            resultingRefreshToken = newRefresh.Token;
+        }
+        else
+        {
+            // Henüz eşik aşılmadıysa mevcut refresh token kullanılmaya devam edilir
+            resultingRefreshToken = existing.Token;
+        }
 
         return Ok(new RefreshTokenResponse
         {
             AccessToken = accessToken,
             ExpiresInMinutes = _jwtOptions.ExpirationMinutes,
-            RefreshToken = newRefresh.Token
+            RefreshToken = resultingRefreshToken
         });
     }
 
@@ -169,6 +193,29 @@ public class AuthController : ControllerBase
             AllClaims = allClaims, // Debug için eklendi
             Message = "Token geçerli"
         });
+    }
+
+    // Kullanıcı çıkışı: verilen refresh token'ı iptal eder (revoke)
+    [HttpPost("logout")]
+    [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.RefreshToken))
+        {
+            return BadRequest("Refresh token gerekli");
+        }
+
+        // Token'ı doğrula; geçerli değilse zaten iptal/expired sayılır
+        var existing = await _refreshTokenService.ValidateRefreshTokenAsync(request.RefreshToken);
+        if (existing == null)
+        {
+            return Ok(new { Message = "Token zaten geçersiz veya bulunamadı" });
+        }
+
+        await _refreshTokenService.RevokeRefreshTokenAsync(new RefreshToken { Id = existing.Id }, replacedByToken: null);
+
+        return Ok(new { Message = "Çıkış yapıldı, refresh token iptal edildi" });
     }
 
 }
