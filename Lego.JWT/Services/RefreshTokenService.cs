@@ -10,10 +10,12 @@ namespace Lego.JWT.Services;
 public class RefreshTokenService : IRefreshTokenService
 {
     private readonly ApiDbContext _dbContext;
+    private readonly ITokenBlacklistService _blacklistService;
 
-    public RefreshTokenService(ApiDbContext dbContext)
+    public RefreshTokenService(ApiDbContext dbContext, ITokenBlacklistService blacklistService)
     {
         _dbContext = dbContext;
+        _blacklistService = blacklistService;
     }
 
     // Kriptografik olarak güçlü bir token değeri üretir
@@ -44,6 +46,12 @@ public class RefreshTokenService : IRefreshTokenService
     // Verilen refresh token'ı doğrular; aktif ve süresi dolmamışsa döndürür
     public async Task<RefreshToken?> ValidateRefreshTokenAsync(string token)
     {
+        // Blacklist kontrolü: token daha önce iptal edilmiş mi?
+        if (await _blacklistService.IsTokenRevokedAsync(token))
+        {
+            return null;
+        }
+
         var entity = await _dbContext.Set<RefreshToken>()
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.Token == token);
@@ -78,6 +86,9 @@ public class RefreshTokenService : IRefreshTokenService
         entity.RevokedAtUtc = DateTime.UtcNow;
         entity.ReplacedByToken = replacedByToken;
         await _dbContext.SaveChangesAsync();
+
+        // Blacklist'e ekle
+        await _blacklistService.RevokeTokenAsync(entity.Token, entity.UserId);
     }
 }
 

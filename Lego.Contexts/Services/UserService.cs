@@ -97,4 +97,24 @@ public class UserService : IUserService
                          .Select(r => r.Trim())
                          .ToList();
     }
+
+    // Şifre değiştirme işlemi
+    public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+    {
+        var user = await GetUserByIdAsync(userId);
+        if (user == null)
+            return false;
+
+        // Mevcut şifreyi doğrula
+        if (!UserSeedData.VerifyPassword(currentPassword, user.PasswordHash))
+            return false;
+
+        // Yeni şifreyi hash'le
+        var newPasswordHash = UserSeedData.HashPassword(newPassword);
+        user.PasswordHash = newPasswordHash;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

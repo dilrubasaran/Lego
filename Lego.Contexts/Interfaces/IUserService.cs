@@ -28,4 +28,7 @@ public interface IUserService
     
     // Kullanıcının rollerini string listesi olarak döndürme
     List<string> GetUserRoles(UserModel user);
+
+    // Şifre değiştirme işlemi
+    Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
 }

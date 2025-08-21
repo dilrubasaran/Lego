@@ -24,16 +24,7 @@ Content-Type: application/json
 
 {
   "username": "manager",
-  "password": "123456"
-}
-
-### 3. Login - Invalid Credentials
-POST https://localhost:7087/api/auth/login
-Content-Type: application/json
-
-{
-  "username": "invalid",
-  "password": "wrongpassword"
+  "password": "yeni123456"
 }
 
 ### 4. Validate Token (Replace {token} with actual token from login response)
@@ -50,6 +41,25 @@ Content-Type: application/json
 
 {
   "refreshToken": "xDZfnFwpQwKV8p7Bs98TWgqe++tLvNlgL1j8cY5TwbhbWky9qs3X1DwCKGl5n9UFD/7AF1v9irwHNJg3rIV4Vg=="
+}
+
+### 7. Şifre Değiştirme Testi (tüm oturumları kapatır)
+POST https://localhost:7087/api/auth/change-password
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzIiwidW5pcXVlX25hbWUiOiJtYW5hZ2VyIiwiZW1haWwiOiJtYW5hZ2VyQGxlZ28uY29tIiwicm9sZSI6WyJNYW5hZ2VyIiwiVXNlciJdLCJqdGkiOiJmZDExNDEzYy1jMjU2LTQ5N2EtODBmZC01MzE5MDY3MjEyOTgiLCJpYXQiOjE3NTU3ODk2MzgsImRlcGFydG1lbnRfaWQiOiJkZWZhdWx0IiwicGVybWlzc2lvbl9sZXZlbCI6InN0YW5kYXJkIiwibmJmIjoxNzU1Nzg5NjM4LCJleHAiOjE3NTU3OTA1MzgsImlzcyI6IkxlZ29BUEkiLCJhdWQiOiJMZWdvVXNlcnMifQ.OA4OTzyEIK1XtFKcZY5XMKIw_GYeT6xG6rjUCwx8Fxk
+Content-Type: application/json
+
+{
+  "currentPassword": "123456",
+  "newPassword": "yeni123456",
+  "confirmNewPassword": "yeni123456"
+}
+
+### 8. Şifre Değiştirme Sonrası Refresh Token Testi (401 dönmeli)
+POST https://localhost:7087/api/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "FL8lBXu26SbuFIJpM/LtKLpplBVcbav4QJL6FTrwQax1LbeZvlQlPWWgY+k65BFxzIX7Zo803fJjia8l1cHPgA=="
 }
 
 

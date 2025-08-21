@@ -18,10 +18,12 @@ public static class JwtServiceCollectionExtensions
         // JWT options'ı yapılandırma dosyasından yükle
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
+
         // JWT servislerini kaydet
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IClaimsService, ClaimsService>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+        services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
 
         return services;
     }
@@ -29,8 +31,8 @@ public static class JwtServiceCollectionExtensions
     // JWT authentication middleware'ini yapılandırır ve DI container'a kaydeder
     public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
-        
+var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
+         
         if (jwtOptions == null)
         {
             throw new InvalidOperationException("JWT yapılandırması bulunamadı. appsettings.json dosyasında 'Jwt' bölümünü kontrol edin.");

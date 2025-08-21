@@ -16,6 +16,7 @@ public class ApiDbContext : DbContext
     // User tablosu - Authentication için
     public DbSet<UserModel> Users { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<RevokedToken> RevokedTokens { get; set; }
 
     // Rate Limiting tabloları
     public DbSet<RateLimitRule> RateLimitRules { get; set; }
@@ -57,6 +58,11 @@ public class ApiDbContext : DbContext
             .WithMany(u => u.RefreshTokens)
             .HasForeignKey(r => r.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // RevokedToken indeksleri
+        modelBuilder.Entity<RevokedToken>()
+            .HasIndex(r => r.Token)
+            .IsUnique();
 
     }
 }

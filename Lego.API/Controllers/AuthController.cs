@@ -20,6 +20,7 @@ public class AuthController : ControllerBase
     private readonly ILogger<AuthController> _logger;
     private readonly IUserService _userService;
     private readonly IRefreshTokenService _refreshTokenService;
+    private readonly ITokenBlacklistService _blacklistService;
 
     // AuthController constructor
     public AuthController(
@@ -28,7 +29,8 @@ public class AuthController : ControllerBase
         IOptions<JwtOptions> jwtOptions,
         ILogger<AuthController> logger,
         IUserService userService,
-       IRefreshTokenService refreshTokenService)
+        IRefreshTokenService refreshTokenService,
+        ITokenBlacklistService blacklistService)
     {
         _jwtService = jwtService;
         _claimsService = claimsService;
@@ -36,6 +38,7 @@ public class AuthController : ControllerBase
         _logger = logger;
         _userService = userService;
         _refreshTokenService = refreshTokenService;
+        _blacklistService = blacklistService;
     }
 
     // Kullanıcı giriş işlemi
@@ -216,6 +219,57 @@ public class AuthController : ControllerBase
         await _refreshTokenService.RevokeRefreshTokenAsync(new RefreshToken { Id = existing.Id }, replacedByToken: null);
 
         return Ok(new { Message = "Çıkış yapıldı, refresh token iptal edildi" });
+    }
+
+    // Şifre değiştirme endpoint'i - tüm oturumları kapatır
+    [HttpPost("change-password")]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [ProducesResponseType(typeof(ChangePasswordResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+    {
+        try
+        {
+            // Model doğrulaması
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Geçersiz şifre değiştirme verisi");
+            }
+
+            // Kullanıcı kimliğini al
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("Geçersiz kullanıcı kimliği");
+            }
+
+            // Şifre değiştirme işlemi
+            var passwordChanged = await _userService.ChangePasswordAsync(userId, request.CurrentPassword, request.NewPassword);
+            if (!passwordChanged)
+            {
+                _logger.LogWarning("Şifre değiştirme başarısız: {UserId}", userId);
+                return BadRequest("Mevcut şifre yanlış veya kullanıcı bulunamadı");
+            }
+
+            // Tüm refresh token'ları iptal et (blacklist'e al)
+            await _blacklistService.RevokeAllForUserAsync(userId);
+
+            _logger.LogInformation("Şifre değiştirildi ve tüm oturumlar kapatıldı: {UserId}", userId);
+
+            return Ok(new ChangePasswordResponse
+            {
+                Success = true,
+                Message = "Şifre başarıyla değiştirildi. Tüm oturumlarınız kapatıldı, lütfen yeniden giriş yapın.",
+                ChangedAtUtc = DateTime.UtcNow,
+                AllSessionsRevoked = true
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Şifre değiştirme işlemi sırasında hata oluştu");
+            return StatusCode(500, "Sunucu hatası oluştu");
+        }
     }
 
 }

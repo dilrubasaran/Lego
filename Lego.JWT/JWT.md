@@ -117,28 +117,36 @@ Access token süresi dolduğunda kullanıcıdan tekrar login istenmeden token ye
 Refresh token'ların güvenli bir şekilde iptal edilmesi ve blacklist mekanizması.
 
 ### 🔧 Yapılacaklar
-- [ ] Logout endpoint'i (refresh token'ı blacklist'e al)
-- [ ] Şifre resetlendiğinde tüm refresh token'ları invalid et
-- [ ] Middleware ile blacklist kontrolü
-- [ ] Stolen token senaryosu için revocation mekanizması
-- [ ] Token monitoring ve audit logları
+- [x] Logout endpoint'i (refresh token'ı blacklist'e al)
+- [x] Şifre resetlendiğinde tüm refresh token'ları invalid et
+- [ ] Middleware ile blacklist kontrolü **şuan yapılmayacak sistem büyüdüğünde yapılacak** sistemin yüke binmemesi için alıcacak önlemler :
+Blacklist’i Memory/Cache üzerinde tutmak
+Logout veya reset işlemi sırasında senkron olarak DB yazmak yerine, arka planda queue ile işleme al.
+Çok büyük token listeleri için Bloom Filter kullanmak.
+Sliding Window ile de sadece son X dakika token’ları kontrol edilebilir → eski token’ları otomatik sil.
+Absolute Expiration ile Merge Etmek Blacklist’e eklenmiş token, süresi dolduğunda otomatik silinir.
+- [ ] Stolen token senaryosu için revocation mekanizması **şuan yapılmayacak canlııya alınacağında daha fazla kulanıcı ile test edilerek yapılacak geliştirme aşamasında uç bir özelllik**
+- [ ] Token monitoring ve audit logları **daha sonra geliştirme aşamasında 3 kullanıcı ile neyi izliyorun hocam**
 
 ### 📊 Blacklist Modeli
 ```csharp
-public class TokenBlacklist
+// Gerçekleştirilen model (EF Core): Token bazlı revocation kaydı
+public class RevokedToken
 {
     public int Id { get; set; }
-    public string Token { get; set; }
-    public string UserId { get; set; }
-    public DateTime RevokedAt { get; set; }
-    public string Reason { get; set; } // "Logout", "PasswordReset", "Stolen"
-    public DateTime ExpiryDate { get; set; }
+    public string Token { get; set; } = string.Empty; // UNIQUE index
+    public int? UserId { get; set; }
+    public DateTime RevokedAtUtc { get; set; } = DateTime.UtcNow;
 }
+// İlgili servisler: ITokenBlacklistService, TokenBlacklistService
+// Entegrasyon: RefreshTokenService.Validate() → blacklist kontrolü,
+//              RefreshTokenService.Revoke() → blacklist'e yazma,
+//              ChangePassword → RevokeAllForUserAsync
 ```
 
 ### 🔍 Test Edilecek Senaryolar
-- [ ] Logout sonrası refresh token ile yeni token alamama ✅
-- [ ] Şifre reset sonrası tüm token'ların invalid olması ✅
+- [x] Logout sonrası refresh token ile yeni token alamama ✅
+- [x] Şifre reset sonrası tüm token'ların invalid olması ✅
 - [ ] Blacklist'teki token ile erişim denemesi → 401 ❌
 - [ ] Stolen token senaryosu (admin tarafından manuel revocation)
 
@@ -314,9 +322,9 @@ public async Task ProtectedEndpoint_WithValidToken_ShouldReturn200()
 - [x] Token rotation test edildi mi?
 
 ### v3 → v4 Geçişi
-- [ ] Blacklist mekanizması çalışıyor mu?
-- [ ] Logout endpoint'i test edildi mi?
-- [ ] Revocation mekanizması kuruldu mu?
+- [x] Blacklist mekanizması çalışıyor mu?
+- [x] Logout endpoint'i test edildi mi?
+- [x] Revocation mekanizması kuruldu mu?
 - [ ] Stolen token senaryosu test edildi mi?
 
 ### v4 → v5 Geçişi (Daha Sonra)

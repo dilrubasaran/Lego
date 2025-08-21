@@ -55,7 +55,7 @@ public static class UserSeedData
     }
 
     // Şifre hash'leme metodu (basit SHA256 - gerçek uygulamada BCrypt kullanılmalı)
-    private static string HashPassword(string password)
+    public static string HashPassword(string password)
     {
         using var sha256 = SHA256.Create();
         var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
