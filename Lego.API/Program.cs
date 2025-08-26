@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Lego.JWT.Extensions;
 using Lego.Contexts.Interfaces;
 using Lego.Contexts.Services;
+using Lego.DataProtection.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,6 +55,9 @@ builder.Services.AddLegoRateLimiting();
 // JWT servisleri
 builder.Services.AddJwtCore(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
+
+// Data Protection servisleri
+builder.Services.AddLegoDataProtection();
 
 // User servisleri
 builder.Services.AddScoped<IUserService, UserService>();

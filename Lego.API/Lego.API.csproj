@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Lego.RateLimiting\Lego.RateLimiting.csproj" />
     <ProjectReference Include="..\Lego.Contexts\Lego.Contexts.csproj" />
     <ProjectReference Include="..\Lego.JWT\Lego.JWT.csproj" />
+    <ProjectReference Include="..\Lego.DataProtection\Lego.DataProtection.csproj" />
   </ItemGroup>
 
 </Project>
