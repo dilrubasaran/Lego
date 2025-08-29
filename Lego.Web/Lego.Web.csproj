@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Lego.Contexts\Lego.Contexts.csproj" />
     <ProjectReference Include="..\Lego.Localization\Lego.Localization.csproj" />
+    <ProjectReference Include="..\Lego.DataProtection\Lego.DataProtection.csproj" />
   </ItemGroup>
 
 </Project>

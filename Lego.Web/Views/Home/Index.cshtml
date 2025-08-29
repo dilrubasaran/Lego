@@ -19,6 +19,24 @@
                     </a>
                     <small class="text-muted d-block">Dil değiştirme testleri</small>
                 </div>
+                <div class="mb-3">
+                    <a href="@Url.Action("GoToAboutPage", "Home", new { id = 1 })" class="btn btn-info">
+                       Data Protection testleri- 🏢 Hakkımızda
+                    </a>
+                    <small class="text-muted d-block">Direkt /a/{token} formatında gizli URL</small>
+                </div>
+                <div class="mb-3">
+                    <a href="@Url.Action("GoToHiddenPage", "Home", new { id = 5 })" class="btn btn-success">
+                       data protection testleri-🔐 Gizli Sayfa (ID 5)
+                    </a>
+                    <small class="text-muted d-block">Direkt /e/{token} formatında gizli URL</small>
+                </div>
+                <div class="mb-3">
+                    <a href="@Url.Action("CreateEditLink", "Home", new { id = 5 })" class="btn btn-outline-secondary">
+                        data protection testleri-📋 Token JSON Demo (ID 5)
+                    </a>
+                    <small class="text-muted d-block">JSON formatında token ve URL'leri göster</small>
+                </div>
                 
 
             </div>

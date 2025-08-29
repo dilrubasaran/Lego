@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Hakkımızda";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">🏢 Hakkımızda</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Sayfa ID:</strong> @ViewData["PageId"]
+                        <small class="text-muted d-block">// Token çözülerek elde edildi</small>
+                    </div>
+                    
+                    <h4>Biz Kimiz?</h4>
+                    <p class="lead">
+                        Lego projesi, modern web teknolojileri ile güvenli ve ölçeklenebilir uygulamalar geliştirmek için tasarlanmış bir framework'tür.
+                    </p>
+                    
+                    <h5>🎯 Misyonumuz</h5>
+                    <p>
+                        Geliştiricilere temiz, güvenli ve sürdürülebilir kod yazma konusunda rehberlik etmek ve best practice'leri uygulamak.
+                    </p>
+                    
+                    <h5>🔧 Teknolojilerimiz</h5>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">ASP.NET Core 9.0</li>
+                        <li class="list-group-item">Entity Framework Core</li>
+                        <li class="list-group-item">JWT Authentication</li>
+                        <li class="list-group-item">Data Protection API</li>
+                        <li class="list-group-item">Rate Limiting</li>
+                        <li class="list-group-item">Localization</li>
+                    </ul>
+                    
+                    <div class="text-center">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">
+                            🏠 Ana Sayfaya Dön
+                        </a>
+                        <a href="@Url.Action("LocalizationTest", "Home")" class="btn btn-outline-secondary">
+                            🌍 Dil Testi
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 using Lego.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Lego.Localization.Interfaces;
+using Lego.DataProtection.Extensions;
 using Lego.Localization.Services;
 using Microsoft.Extensions.Options;
 using Lego.Localization.Extensions;
@@ -24,10 +25,14 @@ builder.Services.AddDbContext<WebDbContext>(options =>
 builder.Services.AddProjectLocalization();
 
 
+
 // ?? DI Servisleri
 builder.Services.AddSingleton<ILocalizationService, LocalizationService>();
 builder.Services.AddScoped<ILanguageService, LanguageService>();
 builder.Services.AddHttpContextAccessor();
+
+// ? DataProtection servisleri (URL token için gerekli)
+builder.Services.AddLegoDataProtection();
 
 var app = builder.Build();
 
@@ -51,6 +56,19 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+// Kısa edit rotası: /e/{token} → Home/Edit
+app.MapControllerRoute(
+        name: "ShortEdit",
+        pattern: "e/{token}",
+        defaults: new { controller = "Home", action = "Edit" });
+
+// Kısa hakkımızda rotası: /a/{token} → Home/About
+app.MapControllerRoute(
+        name: "ShortAbout",
+        pattern: "a/{token}",
+        defaults: new { controller = "Home", action = "About" });
+
+// Varsayılan rota
 app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")

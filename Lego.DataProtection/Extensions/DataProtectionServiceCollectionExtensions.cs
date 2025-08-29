@@ -8,11 +8,12 @@ namespace Lego.DataProtection.Extensions;
 // Veri koruma servisleri için DI uzantısı
 public static class DataProtectionServiceCollectionExtensions
 {
-    // IDataProtection + IDataProtectionService kayıtlarını ekler
+    //Interface ve Service kayıtlarını ekler
     public static IServiceCollection AddLegoDataProtection(this IServiceCollection services)
     {
         services.AddDataProtection(); // DP altyapısını ekler
         services.AddScoped<IDataProtectionService, DataProtectionService>(); // Servis kaydı
+        services.AddScoped<IUrlTokenService, UrlTokenService>(); // URL token servisi kaydı
         return services; // Zincirleme kullanım için dönüş
     }
 }
