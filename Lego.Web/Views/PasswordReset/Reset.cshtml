@@ -1,0 +1,106 @@
+@model Lego.Web.Models.PasswordResetModel
+@{
+    ViewData["Title"] = "Şifre Sıfırlama";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-key me-2"></i>
+                        Şifre Sıfırlama
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(ViewBag.WarningMessage))
+                    {
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            @ViewBag.WarningMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (Model.RemainingTime.HasValue)
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-clock me-2"></i>
+                            <strong>Kalan süre:</strong> 
+                            @if (Model.RemainingTime.Value.TotalMinutes >= 1)
+                            {
+                                @($"{Model.RemainingTime.Value.Minutes} dakika {Model.RemainingTime.Value.Seconds} saniye")
+                            }
+                            else
+                            {
+                                @($"{Model.RemainingTime.Value.Seconds} saniye")
+                            }
+                        </div>
+                    }
+
+                    <form asp-action="Reset" method="post">
+                        <input type="hidden" asp-for="Token" />
+                        @if (Model.RemainingTime.HasValue)
+                        {
+                            <input type="hidden" id="remainingTimeSeconds" value="@((int)Model.RemainingTime.Value.TotalSeconds)" />
+                        }
+                        
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">E-posta Adresi</label>
+                            <input asp-for="Email" class="form-control" readonly />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewPassword" class="form-label">Yeni Şifre</label>
+                            <input asp-for="NewPassword" class="form-control" placeholder="En az 6 karakter" />
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfirmPassword" class="form-label">Şifre Tekrarı</label>
+                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Şifreyi tekrar giriniz" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                Şifreyi Değiştir
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Kalan süreyi geri sayım ile göster
+        var remainingTimeElement = document.getElementById('remainingTimeSeconds');
+        if (remainingTimeElement) {
+            var remainingTime = parseInt(remainingTimeElement.value);
+            
+            function updateCountdown() {
+                if (remainingTime <= 0) {
+                    window.location.href = '/password-reset/expired';
+                    return;
+                }
+                
+                const minutes = Math.floor(remainingTime / 60);
+                const seconds = remainingTime % 60;
+                
+                const countdownText = minutes + ':' + seconds.toString().padStart(2, '0');
+                document.querySelector('.alert-info strong').textContent = 'Kalan süre: ' + countdownText;
+                
+                remainingTime--;
+                setTimeout(updateCountdown, 1000);
+            }
+            
+            updateCountdown();
+        }
+    </script>
+}

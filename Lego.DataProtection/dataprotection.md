@@ -91,9 +91,9 @@
 - **Test:** Endpoint test (OpenAPI + Scalar) geçerli/geçersiz token test edilir ✅
 
 #### Alt Senaryolar:
-- **🔐 Single-Use Token**: Tüketim sonrası otomatik geçersiz kılma (parola sıfırlama gibi)
-- **✉️ Davet Sistemi**: Şifreli link ile kullanıcıyı kayıt ekranına yönlendirme
-- **📧 E-posta Onay/Parola Sıfırlama**: Süreli token ile güvenli işlem doğrulama
+- [x] **🔐 Single-Use Token**: Tüketim sonrası otomatik geçersiz kılma (parola sıfırlama gibi)
+- [ ] **✉️ Davet Sistemi**: Şifreli link ile kullanıcıyı kayıt ekranına yönlendirme
+- [x] **📧 E-posta Onay/Parola Sıfırlama**: Süreli token ile güvenli işlem doğrulama
 
 ### [ ] 🛡️ Anti-Tampering [Advanced]  ✅ (DP zaten MAC ekler) 
 - **Açıklama:** Token üzerinde oynama yapılırsa hata dönülür. Token integrity kontrolü.
