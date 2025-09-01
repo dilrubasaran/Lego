@@ -1,0 +1,85 @@
+### Güvenli Link Oluşturma Testleri
+
+### 1. Süreli Güvenli Link Oluştur (10 dakika)
+POST https://localhost:7087/api/dataprotection/create-secure-link
+Content-Type: application/json
+
+{
+  "baseUrl": "https://example.com",
+  "path": "reset-password",
+  "data": "user123",
+  "expiryMinutes": 1,
+  "purpose": "password-reset"
+}
+
+### 2. Uzun Süreli Link Oluştur (24 saat = 1440 dakika)
+POST https://localhost:7087/api/dataprotection/create-secure-link
+Content-Type: application/json
+
+{
+  "baseUrl": "https://localhost:7087",
+  "path": "email-verification",
+  "data": "user456",
+  "expiryMinutes": 1440,
+  "purpose": "email-verification"
+}
+
+### 3. Süresiz Link Oluştur (10 yıl - varsayılan)
+POST https://localhost:7087/api/dataprotection/create-secure-link
+Content-Type: application/json
+
+{
+  "baseUrl": "https://example.com",
+  "path": "permanent",
+  "data": "permanent-data",
+  "purpose": "permanent"
+}
+
+### 4. Link Bilgilerini Al
+POST https://localhost:7087/api/dataprotection/get-link-info
+Content-Type: application/json
+
+{
+  "secureLink": "https://example.com/reset-password?token=Q2ZESjhKVUhRM18xZlJCSW1XTHNuUU9hLXUzYmp5OEZsaVRYaG16OHpzZkxOTWxIbVZySXg1eWpoYU1MVy1idWFDNmxmTlh5LVQyRkV0ZDhNLXc0QTQxendsTHV0ZTBtWVlpdjVlcUpXN3J4OUhYdlZ6alhkdmZaMENZTDRfblpDcDNSNXg4b2ExY3JJQVp5TXdiRHNpUXBscDdXaXFRa0Y2SFU1ZmJGS0E3QkFweVA2Z2l6bkdsU1p2R0ctWmJmWUdxMHdn",
+  "purpose": "password-reset"
+}
+
+### 5. Link'i Yenile (8 dakika)
+POST https://localhost:7087/api/dataprotection/renew-link
+Content-Type: application/json
+
+{
+  "secureLink": "https://example.com/reset-password?token=Q2ZESjhKVUhRM18xZlJCSW1XTHNuUU9hLXUyNFlDdzYyQWx3Wm04T2tEcXNNQVpKNHNuNXB5QUY4T0o5Y0s1YXR1OWJJRzNhdlB6RGtxbmtxRUxCSVA0bGtTcEx3b3JaSTNrOE5uRmxTM0szSHRIOU14REhUZHR6WEtmT3E2OFhvTFY3Y3lUOTBkRktibWNMRU5yaDdSYXFiZUp1bk5ETExGLWRoU2hsb1h4SDVOZzliM291b0pNbWxaOFE4bVlVcW1TWlRn",
+  "newExpiryMinutes": 8,
+  "purpose": "password-reset"
+}
+
+### 6. Temel Veri Koruma Testleri
+
+### Veri Şifrele (30 dakika süreli)
+POST https://localhost:7087/api/dataprotection/protect
+Content-Type: application/json
+
+{
+  "plaintext": "test-data",
+  "expiryMinutes": 30,
+  "purpose": "test"
+}
+
+### Veri Şifrele (süresiz - 10 yıl)
+POST https://localhost:7087/api/dataprotection/protect
+Content-Type: application/json
+
+{
+  "plaintext": "test-data",
+  "purpose": "test"
+}
+
+### Veri Çöz
+POST https://localhost:7087/api/dataprotection/unprotect
+Content-Type: application/json
+
+{
+  "token": "Q2ZESjhKVUhRM18xZlJCSW1XTHNuUU9hLXUyNFlDdzYyQWx3Wm04T2tEcXNNQVpKNHNuNXB5QUY4T0o5Y0s1YXR1OWJJRzNhdlB6RGtxbmtxRUxCSVA0bGtTcEx3b3JaSTNrOE5uRmxTM0szSHRIOU14REhUZHR6WEtmT3E2OFhvTFY3Y3lUOTBkRktibWNMRU5yaDdSYXFiZUp1bk5ETExGLWRoU2hsb1h4SDVOZzliM291b0pNbWxaOFE4bVlVcW1TWlRn",
+  "purpose": "password-reset"
+}

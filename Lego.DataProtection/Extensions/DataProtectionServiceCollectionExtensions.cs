@@ -14,6 +14,8 @@ public static class DataProtectionServiceCollectionExtensions
         services.AddDataProtection(); // DP altyapısını ekler
         services.AddScoped<IDataProtectionService, DataProtectionService>(); // Servis kaydı
         services.AddScoped<IUrlTokenService, UrlTokenService>(); // URL token servisi kaydı
+        services.AddScoped<ITimeLimitedDataProtectionService, TimeLimitedDataProtectionService>(); // Süreli koruma servisi kaydı
+        services.AddScoped<ILinkGenerationService, LinkGenerationService>(); // Link oluşturma servisi kaydı
         return services; // Zincirleme kullanım için dönüş
     }
 }
