@@ -113,7 +113,7 @@
 
 ## V3 – Form ve Alan Bazlı Veri Koruma
 
-### [ ] 📝 Form Field Koruma [Intermediate] ⚠️ (DP var ama model binder / hidden field için custom code)
+### [x] 📝 Form Field Koruma [Intermediate] ⚠️ (DP var ama model binder / hidden field için custom code)
 - **Açıklama:** IBAN, TC gibi verilerin form gönderiminde şifrelenmesi.
 - **Katman:** Lego.Web, Lego.DataProtection, Lego.API
 - **UI:** .cshtml

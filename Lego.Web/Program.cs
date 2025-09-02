@@ -34,6 +34,15 @@ builder.Services.AddHttpContextAccessor();
 // ? DataProtection servisleri (URL token için gerekli)
 builder.Services.AddLegoDataProtection();
 
+// API HttpClient kaydı
+builder.Services.AddHttpClient("LegoApi", client =>
+{
+    // API base adresi
+    client.BaseAddress = new Uri("https://localhost:7087/");
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+});
+
 var app = builder.Build();
 
 // Middleware

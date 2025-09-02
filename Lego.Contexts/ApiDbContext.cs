@@ -2,6 +2,7 @@ using Lego.Contexts.Models;
 using Microsoft.EntityFrameworkCore;
 using Lego.Contexts.Models.RateLimiting;
 using Lego.Contexts.Models.Auth;
+using Lego.Contexts.Models.DataProtection;
 
 namespace Lego.Contexts;
 
@@ -23,6 +24,7 @@ public class ApiDbContext : DbContext
     public DbSet<RateLimitViolation> RateLimitViolations { get; set; }
     public DbSet<ClientWhitelist> ClientWhitelists { get; set; }
     public DbSet<RateLimitLog> RateLimitLogs { get; set; }
+    public DbSet<UserFormSubmission> UserFormSubmissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
