@@ -1,0 +1,147 @@
+@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Custom Routing - Kategori Listesi";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">🛤️ Custom Routing Test Sayfası</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <h2>📂 Kategoriler</h2>
+            <p class="text-muted">
+                Aşağıdaki kategoriler Bogus kütüphanesi ile oluşturulmuş fake data'dır. 
+                Her kategori için özel URL formatı kullanılmaktadır.
+            </p>
+            
+            @if (Model.Any())
+            {
+                <div class="row">
+                    @foreach (var category in Model)
+                    {
+                        <div class="col-md-6 mb-3">
+                            <a href="@category.Url" class="text-decoration-none">
+                                <div class="card @(category.IsActive ? "border-success" : "border-warning") clickable-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-dark">
+                                            @category.Name
+                                            @if (!category.IsActive)
+                                            {
+                                                <small class="badge bg-warning text-dark">Pasif</small>
+                                            }
+                                        </h5>
+                                        <p class="card-text text-muted">@category.Description</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">
+                                                @category.ProductCount ürün
+                                            </small>
+                                            <div>
+                                                <span class="badge bg-primary">ID: @category.Id</span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <code class="small text-info">@category.Url</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <h4>Henüz kategori bulunmuyor</h4>
+                    <p>Fake data oluşturmak için API'yi kullanabilirsiniz.</p>
+                </div>
+            }
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🔧 Test Araçları</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/CustomRouting/UrlTest" class="btn btn-primary">
+                            URL Parser Test
+                        </a>
+                        <button onclick="refreshData()" class="btn btn-warning">
+                            Fake Data Yenile
+                        </button>
+                        <a href="/api/custom-routing/categories" target="_blank" class="btn btn-info">
+                            API JSON Görünümü
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6>📋 URL Format Örnekleri</h6>
+                </div>
+                <div class="card-body">
+                    <div class="small">
+                        <strong>Kategori:</strong><br>
+                        <code>/category/{id}</code><br><br>
+                        
+                        <strong>Ürün:</strong><br>
+                        <code>/category/{categoryId}/product/{productId}</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.clickable-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.clickable-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #0d6efd !important;
+}
+
+.clickable-card:active {
+    transform: translateY(-2px);
+}
+
+/* Link içindeki text renklerini korumak için */
+a .text-dark:hover {
+    color: #212529 !important;
+}
+
+a .text-muted:hover {
+    color: #6c757d !important;
+}
+
+a .text-info:hover {
+    color: #0dcaf0 !important;
+}
+</style>
+
+<script>
+function refreshData() {
+    fetch('/api/custom-routing/refresh-data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Data yenilendi: ' + data.message);
+        location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Data yenilenirken hata oluştu');
+    });
+}
+</script>

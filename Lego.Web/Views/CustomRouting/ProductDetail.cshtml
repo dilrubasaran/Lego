@@ -1,0 +1,147 @@
+@model dynamic
+@{
+    ViewData["Title"] = $"Ürün: {Model.Product.Name}";
+}
+
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/CustomRouting">Ana Sayfa</a></li>
+            <li class="breadcrumb-item"><a href="@Model.Category.Url">@Model.Category.Name</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Product.Name</li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Ürün Detayı -->
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        🛍️ @Model.Product.Name
+                        @if (!Model.Product.IsActive)
+                        {
+                            <span class="badge bg-warning text-dark">Pasif Ürün</span>
+                        }
+                    </h1>
+                    
+                    <p class="card-text lead">@Model.Product.Description</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="text-success">₺@Model.Product.Price.ToString("N2")</h3>
+                            <p class="text-muted">Marka: <strong>@Model.Product.Brand</strong></p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Teknik Bilgiler -->
+                    <h5>🔧 Teknik Bilgiler</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Ürün ID:</strong></td>
+                                    <td>@Model.Product.Id</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kategori ID:</strong></td>
+                                    <td>@Model.Category.Id</td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <strong>Tam URL:</strong><br>
+                        <code>@Model.Product.Url</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Kategori Bilgisi -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>📂 Kategori</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <a href="@Model.Category.Url" class="text-decoration-none">
+                            @Model.Category.Name
+                        </a>
+                    </h6>
+                    <div class="mt-2">
+                        <span class="badge bg-primary">ID: @Model.Category.Id</span>
+                    </div>
+                    <div class="mt-3">
+                        <a href="@Model.Category.Url" class="btn btn-outline-primary btn-sm">
+                            Kategorideki Diğer Ürünler →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- URL Test -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6>🔧 URL Test</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/CustomRouting/UrlTest" class="btn btn-info btn-sm">
+                            URL Parser Test
+                        </a>
+                        <button onclick="testCurrentUrl()" class="btn btn-warning btn-sm">
+                            Bu URL'yi Test Et
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigasyon -->
+    <div class="mt-4">
+        <a href="@Model.Category.Url" class="btn btn-secondary">
+            ← @Model.Category.Name Kategorisine Dön
+        </a>
+        <a href="/CustomRouting" class="btn btn-outline-secondary">
+            🏠 Ana Sayfaya Dön
+        </a>
+    </div>
+</div>
+
+<script>
+function testCurrentUrl() {
+    const currentUrl = '@Model.Product.Url';
+    
+    fetch('/CustomRouting/ParseUrl', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'url=' + encodeURIComponent(currentUrl)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let message = `URL Test Sonucu (Web Format):\n\n`;
+        message += `Type: ${data.Type}\n`;
+        message += `Valid: ${data.IsValid}\n`;
+        if (data.CategoryId) message += `Category ID: ${data.CategoryId}\n`;
+        if (data.ProductId) message += `Product ID: ${data.ProductId}\n`;
+        if (data.Data) message += `Data: ${JSON.stringify(data.Data, null, 2)}\n`;
+        if (data.Url) message += `Generated URL: ${data.Url}\n`;
+        
+        alert(message);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('URL test edilirken hata oluştu');
+    });
+}
+</script>

@@ -24,6 +24,7 @@
     <ProjectReference Include="..\Lego.Contexts\Lego.Contexts.csproj" />
     <ProjectReference Include="..\Lego.JWT\Lego.JWT.csproj" />
     <ProjectReference Include="..\Lego.DataProtection\Lego.DataProtection.csproj" />
+    <ProjectReference Include="..\Lego.CustomRouting\Lego.CustomRouting.csproj" />
   </ItemGroup>
 
 </Project>

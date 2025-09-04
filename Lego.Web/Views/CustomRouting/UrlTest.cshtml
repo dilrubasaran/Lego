@@ -1,0 +1,231 @@
+@{
+    ViewData["Title"] = "URL Parser Test";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>🔧 URL Parser Test Sayfası</h1>
+            <p class="text-muted">
+                Custom Routing sisteminin URL parsing özelliklerini test edebilirsiniz.
+            </p>
+            
+            <!-- URL Test Formu -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>URL Test Formu</h5>
+                </div>
+                <div class="card-body">
+                    <form id="urlTestForm">
+                        <div class="mb-3">
+                            <label for="urlInput" class="form-label">Test edilecek URL:</label>
+                            <input type="text" class="form-control" id="urlInput" placeholder="Örn: /category/1" autocomplete="off">
+                            <div class="form-text">
+                                Kategoriler için: <code>/category/{id}</code><br>
+                                Ürünler için: <code>/category/{categoryId}/product/{productId}</code>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">URL'yi Test Et</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearResults()">Temizle</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Test Sonuçları -->
+            <div id="testResults" class="mt-4" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Test Sonuçları</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="resultContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Örnek URL'ler -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>💡 Örnek URL'ler</h5>
+                </div>
+                <div class="card-body">
+                    <p class="small">Aşağıdaki örnekleri test edebilirsiniz:</p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary btn-sm" onclick="testUrl('/category/1')">
+                            /category/1
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="testUrl('/category/1/product/5')">
+                            /category/1/product/5
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm" onclick="testUrl('/invalid-url')">
+                            /invalid-url (Geçersiz)
+                        </button>
+                        <button class="btn btn-outline-warning btn-sm" onclick="testUrl('/category/999')">
+                            /category/999 (Mevcut değil)
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- URL Format Açıklaması -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6>📋 URL Format Kuralları</h6>
+                </div>
+                <div class="card-body">
+                    <div class="small">
+                        <strong>Kategori URL:</strong><br>
+                        <code>/category/{id}</code><br>
+                        <em>id: pozitif sayı</em><br><br>
+                        
+                        <strong>Ürün URL:</strong><br>
+                        <code>/category/{categoryId}/product/{productId}</code><br>
+                        <em>categoryId ve productId: pozitif sayılar</em><br><br>
+                        
+                        <strong>Avantajlar:</strong><br>
+                        <ul class="list-unstyled small">
+                            <li>• Hiyerarşik URL yapısı</li>
+                            <li>• SEO dostu</li>
+                            <li>• Kategori bağlamını korur</li>
+                            <li>• Kullanıcı dostu navigasyon</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigasyon -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/CustomRouting" class="btn btn-success">
+                            🏠 Ana Sayfaya Dön
+                        </a>
+                        <a href="/api/custom-routing/categories" target="_blank" class="btn btn-info">
+                            📊 API JSON Görünümü
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('urlTestForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const url = document.getElementById('urlInput').value.trim();
+    if (url) {
+        testUrlInternal(url);
+    } else {
+        alert('Lütfen bir URL girin');
+    }
+});
+
+function testUrl(url) {
+    document.getElementById('urlInput').value = url;
+    testUrlInternal(url);
+}
+
+function testUrlInternal(url) {
+    fetch('/CustomRouting/ParseUrl', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'url=' + encodeURIComponent(url)
+    })
+    .then(response => response.json())
+    .then(data => {
+        showResults(data, url);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('URL test edilirken hata oluştu');
+    });
+}
+
+function showResults(data, originalUrl) {
+    const resultDiv = document.getElementById('resultContent');
+    const testResults = document.getElementById('testResults');
+    
+    let html = `
+        <div class="mb-3">
+            <strong>Test Edilen URL:</strong> <code>${originalUrl}</code>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h6>Parse Sonucu:</h6>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Tip:</span>
+                        <span class="badge ${data.Type === 'Category' ? 'bg-primary' : data.Type === 'Product' ? 'bg-success' : 'bg-danger'}">${data.Type}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Geçerli:</span>
+                        <span class="badge ${data.IsValid ? 'bg-success' : 'bg-danger'}">${data.IsValid ? 'Evet' : 'Hayır'}</span>
+                    </li>`;
+    
+    if (data.CategoryId) {
+        html += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Kategori ID:</span>
+                        <span class="badge bg-info">${data.CategoryId}</span>
+                    </li>`;
+    }
+    
+    if (data.ProductId) {
+        html += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Ürün ID:</span>
+                        <span class="badge bg-info">${data.ProductId}</span>
+                    </li>`;
+    }
+    
+    html += `</ul>
+            </div>
+            <div class="col-md-6">`;
+    
+    if (data.Data) {
+        html += `
+                <h6>Veri:</h6>
+                <div class="card">
+                    <div class="card-body">
+                        <pre class="small">${JSON.stringify(data.Data, null, 2)}</pre>
+                    </div>
+                </div>`;
+        
+        if (data.Url) {
+            html += `
+                <div class="mt-2">
+                    <strong>Oluşturulan URL:</strong><br>
+                    <code>${data.Url}</code>
+                </div>`;
+        }
+    }
+    
+    if (data.Message) {
+        html += `
+                <div class="alert alert-info small">
+                    ${data.Message}
+                </div>`;
+    }
+    
+    html += `
+            </div>
+        </div>`;
+    
+    resultDiv.innerHTML = html;
+    testResults.style.display = 'block';
+    
+    // Scroll to results
+    testResults.scrollIntoView({ behavior: 'smooth' });
+}
+
+function clearResults() {
+    document.getElementById('urlInput').value = '';
+    document.getElementById('testResults').style.display = 'none';
+}
+</script>

@@ -1,0 +1,125 @@
+@model dynamic
+@{
+    ViewData["Title"] = $"Kategori: {Model.Category.Name}";
+}
+
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/CustomRouting">Ana Sayfa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Category.Name</li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Kategori Başlık -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h1 class="card-title">📂 @Model.Category.Name</h1>
+                    <p class="card-text">@Model.Category.Description</p>
+                    <div class="mt-2">
+                        <span class="badge bg-primary">ID: @Model.Category.Id</span>
+                    </div>
+                    <div class="mt-2">
+                        <strong>URL:</strong> <code>@Model.Category.Url</code>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ürünler -->
+            <h2>🛍️ Ürünler (@Model.Products.Count)</h2>
+            
+            @if (Model.Products.Count > 0)
+            {
+                <div class="row">
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <a href="@product.Url" class="text-decoration-none">
+                                <div class="card h-100 @(product.IsActive ? "border-success" : "border-warning") clickable-card">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title text-dark">
+                                            @product.Name
+                                            @if (!product.IsActive)
+                                            {
+                                                <small class="badge bg-warning text-dark">Pasif</small>
+                                            }
+                                        </h5>
+                                        <p class="card-text flex-grow-1 text-muted">@product.Description</p>
+                                        
+                                        <div class="mt-auto">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <strong class="text-success">₺@product.Price.ToString("N2")</strong>
+                                                <small class="text-muted">@product.Brand</small>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small>
+                                                    <span class="badge bg-primary">ID: @product.Id</span>
+                                                </small>
+                                            </div>
+                                            
+                                            <div class="mt-2">
+                                                <code class="small text-info">@product.Url</code>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <h4>Bu kategoride henüz ürün bulunmuyor</h4>
+                    <p>Fake data generator ile yeni ürünler oluşturabilirsiniz.</p>
+                </div>
+            }
+        </div>
+    </div>
+    
+    <!-- Geri Dön -->
+    <div class="mt-4">
+        <a href="/CustomRouting" class="btn btn-secondary">
+            ← Kategorilere Geri Dön
+        </a>
+    </div>
+</div>
+
+<style>
+.clickable-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.clickable-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #0d6efd !important;
+}
+
+.clickable-card:active {
+    transform: translateY(-2px);
+}
+
+/* Link içindeki text renklerini korumak için */
+a .text-dark:hover {
+    color: #212529 !important;
+}
+
+a .text-muted:hover {
+    color: #6c757d !important;
+}
+
+a .text-info:hover {
+    color: #0dcaf0 !important;
+}
+
+a .text-success:hover {
+    color: #198754 !important;
+}
+</style>

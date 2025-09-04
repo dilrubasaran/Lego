@@ -5,6 +5,7 @@ using Lego.DataProtection.Extensions;
 using Lego.Localization.Services;
 using Microsoft.Extensions.Options;
 using Lego.Localization.Extensions;
+using Lego.CustomRouting.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,9 @@ builder.Services.AddHttpContextAccessor();
 
 // ? DataProtection servisleri (URL token için gerekli)
 builder.Services.AddLegoDataProtection();
+
+// ?? Custom Routing servisleri
+builder.Services.AddCustomRouting();
 
 // API HttpClient kaydı
 builder.Services.AddHttpClient("LegoApi", client =>

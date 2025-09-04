@@ -1,0 +1,45 @@
+### Custom Routing API Tests
+
+### 1. Tüm kategorileri ve URL'lerini getir
+GET https://localhost:7087/api/custom-routing/categories
+Accept: application/json
+
+### 2. Belirli kategori detayı (Kategori ID: 1)
+GET https://localhost:7087/api/custom-routing/categories/1
+Accept: application/json
+
+### 3. Kategori URL'ini parse et (geçerli)
+POST https://localhost:7087/api/custom-routing/parse-url
+Content-Type: application/json
+
+{
+  "url": "/category/1"
+}
+
+### 4. Ürün URL'ini parse et (geçerli)
+POST https://localhost:7087/api/custom-routing/parse-url
+Content-Type: application/json
+
+{
+  "url": "/product/5"
+}
+
+### 5. Geçersiz URL parse testi
+POST http://localhost:7087/api/custom-routing/parse-url
+Content-Type: application/json
+
+{
+  "url": "/invalid-url-format"
+}
+### 6. Fake data yenileme
+POST https://localhost:7087/api/custom-routing/refresh-data
+Content-Type: application/json
+
+### 8. Mevcut olmayan kategori URL'i parse etme
+POST https://localhost:7087/api/custom-routing/parse-url
+Content-Type: application/json
+
+{
+  "url": "/category/999"
+}
+

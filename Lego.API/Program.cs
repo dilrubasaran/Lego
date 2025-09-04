@@ -8,6 +8,7 @@ using Lego.JWT.Extensions;
 using Lego.Contexts.Interfaces;
 using Lego.Contexts.Services;
 using Lego.DataProtection.Extensions;
+using Lego.CustomRouting.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,6 +59,9 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 
 // Data Protection servisleri
 builder.Services.AddLegoDataProtection();
+
+//  Custom Routing servisleri
+builder.Services.AddCustomRouting();
 
 // User servisleri
 builder.Services.AddScoped<IUserService, UserService>();
