@@ -91,6 +91,9 @@ app.UseIpRateLimiting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// UserId bazlı rate limiting middleware'ini ekle (Authentication'dan sonra - JWT token'a ihtiyaç var)
+app.UseUserIdRateLimiting();
+
 app.MapControllers();
 
 // ?? Seed data'yı çalıştır
@@ -98,7 +101,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
     
-    //// User seed data
+    // User seed data
     if (!context.Users.Any())
     {
        context.Users.AddRange(Lego.Contexts.Seed.UserSeedData.GetUsers());

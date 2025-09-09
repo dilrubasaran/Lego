@@ -17,4 +17,13 @@ public class RateLimitResponse
     
     // Client IP adresi (opsiyonel)
     public string? ClientIP { get; set; }
+    
+    // UserId (JWT'den alınan - opsiyonel)
+    public string? UserId { get; set; }
+    
+    // UserName (JWT'den alınan - opsiyonel)
+    public string? UserName { get; set; }
+    
+    // Request ID (ardışık testler için - opsiyonel)
+    public string? RequestId { get; set; }
 }

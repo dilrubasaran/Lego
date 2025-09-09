@@ -64,6 +64,20 @@ public static class RateLimitSeedData
                 IsActive = true,
                 Description = "API endpoint'leri için sıkı limit - 1 dakikada 2 istek",
                 CreatedAt = DateTime.UtcNow
+            },
+
+            // UserId bazlı genel rate limit: 1 dakikada 100 istek
+            new RateLimitRule
+            {
+                Id = 5,
+                Endpoint = "*",
+                HttpMethod = "*",
+                ClientType = "UserId",
+                Limit = 100,
+                Period = TimeSpan.FromMinutes(1),
+                IsActive = true,
+                Description = "Authorize olmuş kullanıcılar için genel limit - 1 dakikada 100 istek",
+                CreatedAt = DateTime.UtcNow
             }
         };
     }

@@ -2,7 +2,9 @@ using Lego.API.DTOs.RateLimiting;
 using Lego.Contexts.Enums;
 using Lego.Contexts.Models;
 using Lego.RateLimiting.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 // Rate limiting test controller'ı. Farklı endpoint'ler için rate limiting kurallarını test etmek için kullanılır.
 
@@ -96,6 +98,46 @@ public class RateLimitingController : ControllerBase
         {
             Message = "IP bazlı rate limiting test",
             RateLimit = "1dk/10 istek",
+            ClientIP = clientIP,
+            Timestamp = DateTime.UtcNow,
+            Status = "success"
+        });
+    }
+
+    // 🔥 UserId bazlı rate limiting test endpoint'i - TEST: 1dk/3 istek
+    [HttpGet("user-test")]
+    [Authorize] // JWT gerekli
+    [ProducesResponseType(typeof(RateLimitResponse), 200)]
+    [ProducesResponseType(typeof(RateLimitErrorResponse), 429)]
+    public ActionResult<RateLimitResponse> UserIdTest()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown";
+        var userName = User.FindFirst(ClaimTypes.Name)?.Value ?? "Unknown";
+        
+        return Ok(new RateLimitResponse
+        {
+            Message = "🔥 UserId bazlı rate limiting test - TEST LİMİTİ",
+            RateLimit = "1dk/100 istek (TEST)",
+            UserId = userId,
+            UserName = userName,
+            Timestamp = DateTime.UtcNow,
+            Status = "success"
+        });
+    }
+
+
+    // Anonymous kullanıcı için IP fallback test endpoint'i
+    [HttpGet("anonymous-test")]
+    [ProducesResponseType(typeof(RateLimitResponse), 200)]
+    [ProducesResponseType(typeof(RateLimitErrorResponse), 429)]
+    public ActionResult<RateLimitResponse> AnonymousTest()
+    {
+        var clientIP = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+        
+        return Ok(new RateLimitResponse
+        {
+            Message = "👤 Anonymous kullanıcı - IP bazlı fallback test",
+            RateLimit = "IP bazlı limite tabi",
             ClientIP = clientIP,
             Timestamp = DateTime.UtcNow,
             Status = "success"
