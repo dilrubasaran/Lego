@@ -1,6 +1,5 @@
 using AspNetCoreRateLimit;
 using Scalar.AspNetCore;
-using Lego.RateLimiting.Stores;
 using Lego.RateLimiting.Extensions;
 using Lego.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -42,15 +41,23 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// Rate limiting servislerini ekle
-builder.Services.AddMemoryCache();
+// AspNetCoreRateLimit servisleri (IP ve Endpoint bazlı)
 builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
 builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
-builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 builder.Services.AddInMemoryRateLimiting();
 
-// Lego Rate Limiting servisleri
+// IP algılama için custom configuration
+builder.Services.Configure<IpRateLimitOptions>(options =>
+{
+    options.EnableEndpointRateLimiting = true;
+    options.StackBlockedRequests = false;
+    options.HttpStatusCode = 429;
+    options.RealIpHeader = "X-Real-IP";
+    options.ClientIdHeader = "X-ClientId";
+});
+
+// Lego Rate Limiting servisleri (UserId bazlı + Adapter köprüsü)
 builder.Services.AddLegoRateLimiting();
 
 // JWT servisleri
@@ -77,21 +84,20 @@ app.UseHttpsRedirection();
 
 // CORS middleware'ini ekle
 app.UseCors("AllowAll");
-
 // 🔥 Global error handling middleware'ini ekle (İLK SIRADA - tüm hataları yakalar)
 app.UseGlobalErrorHandling();
 
 // Rate limit logging middleware'ini ekle (ÖNCE - response'u yakalamak için)
 app.UseRateLimitLogging();
 
-// Rate limiting middleware'ini ekle (SONRA - gerçek rate limiting)
+// IP/Endpoint bazlı rate limiting (AspNetCoreRateLimit kütüphanesi)
 app.UseIpRateLimiting();
 
 // JWT Authentication ve Authorization middleware'lerini ekle
 app.UseAuthentication();
 app.UseAuthorization();
 
-// UserId bazlı rate limiting middleware'ini ekle (Authentication'dan sonra - JWT token'a ihtiyaç var)
+// UserId bazlı rate limiting middleware'ini ekle (Authentication'dan sonra - sadece JWT token varsa)
 app.UseUserIdRateLimiting();
 
 app.MapControllers();
@@ -115,6 +121,7 @@ using (var scope = app.Services.CreateScope())
         context.SaveChanges();
     }
     
+    // Client whitelist seed data
     if (!context.ClientWhitelists.Any())
     {
         context.ClientWhitelists.AddRange(Lego.Contexts.Seed.RateLimitSeedData.GetClientWhitelists());
@@ -123,3 +130,4 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+

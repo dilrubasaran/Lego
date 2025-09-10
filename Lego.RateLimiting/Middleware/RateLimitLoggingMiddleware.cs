@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lego.RateLimiting.Middleware;
-
+//? try cache azaltılır mı bak 
 // Rate limiting işlemlerini loglayan middleware
 // RateLimitViolation ve RateLimitLog kayıtlarını otomatik olarak veritabanına yazar
 public class RateLimitLoggingMiddleware
@@ -37,60 +37,54 @@ public class RateLimitLoggingMiddleware
         _logger.LogDebug("🔍 RateLimitLoggingMiddleware BAŞLADI: {Endpoint} {Method} - {ClientIdentifier} ({ClientType})",
             endpoint, httpMethod, clientIdentifier, clientType);
 
-        // Response stream'i wrap et ki response yazıldığında yakalayabilelim
-        var originalBodyStream = context.Response.Body;
-        
-        // OnCompleted callback register et - response tam yazıldığında çalışır
-        context.Response.OnCompleted(async () =>
-        {
-            // Fire and forget - database lock'u önlemek için ayrı task'ta çalıştır
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    var statusCode = context.Response.StatusCode;
-                    var isLimited = statusCode == 429;
-                    var message = isLimited ? "Rate limit aşıldı" : "İstek başarılı";
-                    
-                    _logger.LogInformation("📊 RESPONSE COMPLETED: StatusCode={StatusCode}, IsLimited={IsLimited}, Endpoint={Endpoint}", 
-                        statusCode, isLimited, endpoint);
-                    
-                    await ProcessResponseAsync(endpoint, httpMethod, clientIdentifier, clientType, ipAddress, statusCode, isLimited, message);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "OnCompleted callback'inde hata oluştu: {Endpoint}", endpoint);
-                }
-            });
-        });
+        int statusCode = 200;
+        bool hasError = false;
+        string? errorMessage = null;
 
         try
         {
             // Sonraki middleware'e geç
             await _next(context);
 
+            // HttpContext hala aktifken StatusCode'u al
+            statusCode = context.Response.StatusCode;
+
             _logger.LogDebug("✅ Pipeline TAMAMLANDI: StatusCode={StatusCode} | {Endpoint} {Method}",
-                context.Response.StatusCode, endpoint, httpMethod);
+                statusCode, endpoint, httpMethod);
         }
         catch (Exception ex)
         {
+            hasError = true;
+            statusCode = 500;
+            errorMessage = ex.Message;
+
             _logger.LogError(ex, "❌ RateLimitLoggingMiddleware'de hata oluştu: {Endpoint} {Method}",
                 endpoint, httpMethod);
 
-            // Hata durumunda da log kaydı oluştur
+            throw; // Hatayı yeniden fırlat
+        }
+        finally
+        {
+            // HttpContext dispose olmadan önce logging işlemini başlat
+            var isLimited = statusCode == 429;
+            var message = hasError ? $"Hata: {errorMessage}" : 
+                         isLimited ? "Rate limit aşıldı" : "İstek başarılı";
+
+            _logger.LogInformation("📊 RESPONSE COMPLETED: StatusCode={StatusCode}, IsLimited={IsLimited}, Endpoint={Endpoint}", 
+                statusCode, isLimited, endpoint);
+
+            // Fire and forget - database lock'u önlemek için ayrı task'ta çalıştır
             _ = Task.Run(async () =>
             {
                 try
                 {
-                    await ProcessResponseAsync(endpoint, httpMethod, clientIdentifier, clientType, ipAddress, 500, false, $"Hata: {ex.Message}");
+                    await ProcessResponseAsync(endpoint, httpMethod, clientIdentifier, clientType, ipAddress, statusCode, isLimited, message);
                 }
-                catch (Exception logEx)
+                catch (Exception ex)
                 {
-                    _logger.LogError(logEx, "Error logging'de hata oluştu: {Endpoint}", endpoint);
+                    _logger.LogError(ex, "Background logging'de hata oluştu: {Endpoint}", endpoint);
                 }
             });
-
-            throw; // Hatayı yeniden fırlat
         }
     }
 

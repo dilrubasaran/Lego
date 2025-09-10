@@ -19,8 +19,7 @@ Content-Type: application/json
 
 
 ### Response'tan token'ı al ve aşağıdaki @token değişkenine yapıştır
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AbGVnby5jb20iLCJyb2xlIjpbIkFkbWluIiwiVXNlciJdLCJqdGkiOiIwNDc5NWIwNi05MDkzLTQ5MWUtYWFiYy0xMzQ0NzZiNzI3M2QiLCJpYXQiOjE3NTc0MjA3NTUsImRlcGFydG1lbnRfaWQiOiJkZWZhdWx0IiwicGVybWlzc2lvbl9sZXZlbCI6InN0YW5kYXJkIiwibmJmIjoxNzU3NDIwNzU1LCJleHAiOjE3NTc0MjE2NTUsImlzcyI6IkxlZ29BUEkiLCJhdWQiOiJMZWdvVXNlcnMifQ.zFZ6ithkYkYQ2DGz7pTcpZ2SrXVYix9RXYfLgytwu0s
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AbGVnby5jb20iLCJyb2xlIjpbIkFkbWluIiwiVXNlciJdLCJqdGkiOiJkZGQ4NjkzOC0xMWVjLTQzZDYtOGNhMy0yYTgwZDQzYWMxNTgiLCJpYXQiOjE3NTc1MDU1NDgsImRlcGFydG1lbnRfaWQiOiJkZWZhdWx0IiwicGVybWlzc2lvbl9sZXZlbCI6InN0YW5kYXJkIiwibmJmIjoxNzU3NTA1NTQ4LCJleHAiOjE3NTc1MDY0NDgsImlzcyI6IkxlZ29BUEkiLCJhdWQiOiJMZWdvVXNlcnMifQ.2mKnD-pZjxZNUW3FbMbd3KLqJfGxbaqbUQHKYmu01Co
 ### ========================================
 ### 2. 🔥 USERID BAZLI RATE LIMITING TEST 
 ### ========================================
@@ -31,42 +30,7 @@ Content-Type: application/json
 GET {{apiUrl}}/RateLimiting/user-test
 Authorization: Bearer {{token}}
 
-### 2. İstek - SUCCESS bekleniyor  
-GET {{apiUrl}}/RateLimiting/user-test
-Authorization: Bearer {{token}}
 
-### 3. İstek - SUCCESS bekleniyor
-GET {{apiUrl}}/RateLimiting/user-test
-Authorization: Bearer {{token}}
-
-### 4. İstek - 429 TOO MANY REQUESTS bekleniyor ❌
-GET {{apiUrl}}/RateLimiting/user-test
-Authorization: Bearer {{token}}
-
-### 5. İstek - Yine 429 bekleniyor ❌
-GET {{apiUrl}}/RateLimiting/user-test
-Authorization: Bearer {{token}}
-
-### ========================================
-### 3. ⚡ HIZLI ARDIŞIK TEST
-### ========================================
-### Hızlı ardışık istekler ile rate limiting testi
-
-### Hızlı Test 1
-GET {{apiUrl}}/RateLimiting/user-rapid
-Authorization: Bearer {{token}}
-
-### Hızlı Test 2
-GET {{apiUrl}}/RateLimiting/user-rapid
-Authorization: Bearer {{token}}
-
-### Hızlı Test 3
-GET {{apiUrl}}/RateLimiting/user-rapid
-Authorization: Bearer {{token}}
-
-### Hızlı Test 4 - Rate limit aşımı bekleniyor ❌
-GET {{apiUrl}}/RateLimiting/user-rapid
-Authorization: Bearer {{token}}
 
 ### ========================================
 ### 4. 👤 ANONYMOUS TEST (IP Fallback)
@@ -75,78 +39,3 @@ Authorization: Bearer {{token}}
 
 ### Anonymous Test 1
 GET {{apiUrl}}/RateLimiting/anonymous-test
-
-### Anonymous Test 2
-GET {{apiUrl}}/RateLimiting/anonymous-test
-
-### Anonymous Test 3
-GET {{apiUrl}}/RateLimiting/anonymous-test
-
-### Anonymous Test 4
-GET {{apiUrl}}/RateLimiting/anonymous-test
-
-### Anonymous Test 5
-GET {{apiUrl}}/RateLimiting/anonymous-test
-
-### ========================================
-### 5. 🔍 IP SPECIFIC TEST
-### ========================================
-### IP bazlı rate limiting testi
-
-### IP Test 1
-GET {{apiUrl}}/RateLimiting/ip-specific
-
-### IP Test 2
-GET {{apiUrl}}/RateLimiting/ip-specific
-
-### IP Test 3
-GET {{apiUrl}}/RateLimiting/ip-specific
-
-### ========================================
-### 6. 📊 DİĞER ENDPOINT'LER
-### ========================================
-
-### Public endpoint test
-GET {{apiUrl}}/RateLimiting/public
-
-### Private endpoint test
-GET {{apiUrl}}/RateLimiting/private
-
-### Submit data test
-POST {{apiUrl}}/RateLimiting/submit
-Content-Type: application/json
-
-{
-  "content": "Test data for rate limiting"
-}
-
-### ========================================
-### 7. ⏰ 1 DAKİKA SONRA TEST (Reset testi)
-### ========================================
-### 1 dakika bekledikten sonra counter'ların reset olduğunu test et
-
-### Reset Test - 1 dakika sonra çalıştır
-GET {{apiUrl}}/RateLimiting/user-test
-Authorization: Bearer {{token}}
-
-### ========================================
-### 8. 🚨 HATA SENARYOLARI
-### ========================================
-
-### Geçersiz token ile test
-GET {{apiUrl}}/RateLimiting/user-test
-Authorization: Bearer invalid_token_here
-
-### Token olmadan authorize endpoint'e istek
-GET {{apiUrl}}/RateLimiting/user-test
-
-### ========================================
-### NOTLAR:
-### ========================================
-### 1. İlk olarak login yapıp JWT token alın
-### 2. Token'ı @token değişkenine yapıştırın
-### 3. UserId rate limiting: 1dk/3 istek (TEST)
-### 4. 4. istekten itibaren 429 error bekleniyor
-### 5. 1 dakika sonra counter reset olur
-### 6. Anonymous istekler IP bazlı limite tabi
-### ========================================

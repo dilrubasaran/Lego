@@ -1,52 +1,35 @@
 using Lego.RateLimiting.Interfaces;
-using Microsoft.Extensions.Caching.Memory;
+using Lego.RateLimiting.Models;
 
 namespace Lego.RateLimiting.Services;
 
-// MemoryCache tabanlı Rate Limit sayaç servisi (thread-safe, Redis'e kolay geçiş)
-public class RateLimitCounterService : IRateLimitCounterService
+// Rate limiting iş mantığını yöneten servis (Storage-agnostic)
+public class RateLimitingCounterService
 {
-    private readonly IMemoryCache _cache;
+    private readonly ICustomRateLimitCounterStore _store;
 
-    public RateLimitCounterService(IMemoryCache cache)
+    public RateLimitingCounterService(ICustomRateLimitCounterStore store)
     {
-        _cache = cache;
+        _store = store;
     }
 
-    // Anahtara göre sayacı alır
-    public Task<RateLimitCounter?> GetAsync(string key)
+    // Rate limit kontrolü ve arttırma (iş mantığı)
+    public async Task<RateLimitResult> CheckAndIncrementAsync(string key, TimeSpan period, int limit)
     {
-        if (_cache.TryGetValue(key, out RateLimitCounter? counter))
-        {
-            return Task.FromResult<RateLimitCounter?>(counter);
-        }
-        return Task.FromResult<RateLimitCounter?>(null);
+        // Store'dan direkt RateLimitResult alıyoruz - gereksiz dönüşüm yok
+        return await _store.IncrementAsync(key, period, limit);
     }
 
-    // Atomik arttırma (MemoryCache thread-safe, Redis'te INCR ile değiştirilebilir)
-    public Task<RateLimitCounter> IncrementAsync(string key, TimeSpan period)
+    // Counter durumunu sorgula
+    public async Task<RateLimitResult?> GetStatusAsync(string key)
     {
-        var counter = _cache.Get<RateLimitCounter>(key);
-        
-        if (counter == null)
-        {
-            counter = new RateLimitCounter { Count = 1, Timestamp = DateTime.UtcNow };
-        }
-        else
-        {
-            counter.Count += 1;
-            counter.Timestamp = DateTime.UtcNow;
-        }
-        
-        // TTL ile cache'e kaydet
-        _cache.Set(key, counter, period);
-        return Task.FromResult(counter);
+        // Store'dan direkt RateLimitResult alıyoruz - gereksiz dönüşüm yok
+        return await _store.GetAsync(key);
     }
 
-    // Sayacı kaydeder/yeniler
-    public Task SetAsync(string key, RateLimitCounter counter, TimeSpan period)
+    // Counter'ı sıfırla
+    public async Task ResetAsync(string key)
     {
-        _cache.Set(key, counter, period);
-        return Task.CompletedTask;
+        await _store.ResetAsync(key);
     }
 }

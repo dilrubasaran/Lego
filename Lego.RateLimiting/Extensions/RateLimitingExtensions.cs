@@ -1,8 +1,10 @@
+using AspNetCoreRateLimit;
 using Lego.RateLimiting.Middleware;
 using Lego.RateLimiting.Stores;
 using Lego.RateLimiting.Interfaces;
 using Lego.RateLimiting.Evaluators;
 using Lego.RateLimiting.Services;
+using Lego.RateLimiting.Adapters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,11 +23,19 @@ public static class RateLimitingExtensions
 		services.AddScoped<IUserIdResolver, UserIdResolver>();
 		services.AddScoped<IClientIpResolver, ClientIpResolver>();
 		
-		// MemoryCache tabanlı counter servisimizi ekle (Redis'e kolay geçiş için abstraction altında)
+		// Custom rate limit counter store ve service'i ekle (sadece UserId için)
 		services.AddMemoryCache();
-		services.AddScoped<IRateLimitCounterService, RateLimitCounterService>();
+		services.AddSingleton<ICustomRateLimitCounterStore, MemoryRateLimitCounterStore>();
+		services.AddScoped<RateLimitingCounterService>();
 		
-		// Evaluator'ları ekle
+
+        //? adapteri şuan kullanım dışı kütüphane  den entpoint ve ip bazı rate limiti uygulamak içn 
+		// Adapter - AspNetCoreRateLimit ile bizim custom store arasındaki köprü
+		//services.AddSingleton<IRateLimitCounterStore, RateLimitCounterStoreAdapter>();
+			// NOT: AspNetCoreRateLimit kendi default store'unu kullanacak
+
+
+		// Evaluator'ları ekle - Sadece UserId bazlı custom rate limiting
 		services.AddScoped<IRateLimitingEvaluator, UserIdRateLimitingEvaluator>();
 		
 		return services;
