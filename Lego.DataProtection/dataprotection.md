@@ -51,7 +51,7 @@
 - **Endpoint:** Hayır
 - **Test:** Unit test (koruma/çözme doğruluğu)
 
-### [x] 🔁 Token Protect-Unprotect [MVP] ✅
+### [x] 🔁 Token Protect-Unprotect anti tamping  [MVP] ✅
 - **Açıklama:** Token gibi kısa ömürlü verilerin şifrelenmesi ve doğrulama işlemleri.
 - **Katman:** Lego.API
 - **UI:** Gerekli değil
@@ -95,12 +95,6 @@
 - [ ] **✉️ Davet Sistemi**: Şifreli link ile kullanıcıyı kayıt ekranına yönlendirme
 - [x] **📧 E-posta Onay/Parola Sıfırlama**: Süreli token ile güvenli işlem doğrulama
 
-### [ ] 🛡️ Anti-Tampering [Advanced]  ✅ (DP zaten MAC ekler) 
-- **Açıklama:** Token üzerinde oynama yapılırsa hata dönülür. Token integrity kontrolü.
-- **Katman:** Lego.API, Lego.DataProtection
-- **UI:** Gerekli değil
-- **Endpoint:** Evet
-- **Test:** Bozuk token ile test senaryosu (Unit + Manipüle link testleri)
 
 ### [ ] 🔗 Link Kapsamı Kısıtlama [Advanced] ⚠️ (DP var ama URL binding mantığını sen yazacaksın)
 - **Açıklama:** Belirli URL ile geçerli olan tokenlar (çapraz kötüye kullanım engeli).
@@ -148,7 +142,7 @@
 
 ## V4 – Kullanıcıya/Tenant'a Özel Şifreleme
 
-### [ ] 🧩 Scoped IDataProtector Kullanımı [Advanced] ✅ 
+### [ ] 🧩 User/Tenant scoped encryption [Advanced] ✅ 
 - **Açıklama:** Scope bazlı protector üretimi ile kullanıcı/tenant'a özel anahtar yönetimi.
 - **Katman:** Lego.DataProtection, Lego.Context
 - **UI:** Gerekli değil
@@ -184,12 +178,6 @@
 - **Endpoint:** Evet
 - **Test:** Ortak token ile her iki uygulamada veri çözülüp çözülemediği test edilir
 
-### [ ] 🔧 Key Rotation [Advanced]  ✅ (DP built-in)
-- **Açıklama:** Key'in periyodik rotasyonu + eski key ile çalışabilme, otomatik key üretimi, fallback çözme.
-- **Katman:** Lego.DataProtection
-- **UI:** Gerekli değil
-- **Endpoint:** Hayır
-- **Test:** Token geçmişi ve geçerli token senaryoları OpenAPI ile test edilir
 
 ### [ ] 🛑 Anahtar Erişim Kısıtlama [Advanced] ⚠️ (DP key ring ortam bazlı olur ama sen yönetirsin)
 - **Açıklama:** Ortama özel (Production, Staging) key geçerliliği.
