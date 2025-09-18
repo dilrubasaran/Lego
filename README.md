@@ -83,7 +83,6 @@ app.UseUserIdRateLimiting();
 - ✅ Fake data üretimi (Bogus entegrasyonu)
 - ✅ Interaktif test sayfaları
 - ✅ URL parsing ve validation
-- 🔄 Çoklu dil/region routing (geliştirilme aşamasında)
 
 ```csharp
 // Kullanım örneği
@@ -233,7 +232,6 @@ dotnet run
 ### Sonraki Adımlar (v2.0)
 - 🔄 Advanced JWT (Policy/Role-based auth)
 - 🔄 Database-driven rate limiting rules
-- 🔄 Multi-language routing
 - 🔄 Advanced data protection (field-level encryption)
 - 🔄 Real-time monitoring dashboard
 
@@ -252,12 +250,17 @@ dotnet run
 4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
 
+## 📝 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
+
 
 ## 🙋‍♂️ İletişim
 
 Proje hakkında sorularınız için:
 - 📧 E-posta: [dilrubabasarann@gmail.com]
 - 📖 Dokümantasyon: Her modülün kendi MD dosyası
+
 
 ---
 
