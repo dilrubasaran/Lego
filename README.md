@@ -2,7 +2,7 @@
 
 ## 📋 Proje Hakkında
 
-**Lego**, modern web uygulamaları için geliştirilen modüler ve yeniden kullanılabilir .NET Core kütüphane koleksiyonudur. Her bir modül, "Lego tuğlası" konseptiyle bağımsız olarak çalışabilir ve farklı projelerde kolayca entegre edilebilir.
+**Lego**, modern web uygulamaları için geliştirilen modüler ve yeniden kullanılabilir .NET Core kütüphane koleksiyonudur. Her bir modül, "Lego parçası " konseptiyle bağımsız olarak çalışabilir ve farklı projelerde kolayca entegre edilebilir.
 
 Bu proje, geliştiricilerin sıkça ihtiyaç duyduğu temel işlevleri (localization, rate limiting, jwt, data protection ve custom routing) modüler bir şekilde sunar.
 
